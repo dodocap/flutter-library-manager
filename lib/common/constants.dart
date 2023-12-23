@@ -1,0 +1,1 @@
+const errMemberExist = '[오류] 동일한 회원이 존재합니다';
