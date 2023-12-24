@@ -3,8 +3,7 @@ import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/domain/model/member.dart';
 import 'package:orm_library_manager/domain/repository/member_repository.dart';
-
-import 'member_memory_repository.dart';
+import '../../data/repository_impl/member_memory_repository.dart';
 
 void main() {
   late MemberRepository memberRepository;
