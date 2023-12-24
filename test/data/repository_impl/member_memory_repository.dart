@@ -24,7 +24,6 @@ class MemberMemoryRepository implements MemberRepository {
       return Future.error(errMemberExist);
     }
 
-    member.id = DateTime.now().millisecondsSinceEpoch;
     _memberList.add(member);
     return member;
   }
