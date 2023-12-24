@@ -15,8 +15,8 @@ void main() {
     member = Member(
       name: '홍길동',
       address: '서울',
-      contact: '01012345678',
-      birthDate: '20230101',
+      contact: '010-1234-5678',
+      birthDate: '2023-01-01',
       gender: Gender.male,
     );
   });
@@ -37,8 +37,8 @@ void main() {
   test('멤버 가입', () async {
     final Member newMember = Member(name: '홍길순',
       address: '인천',
-      contact: '01012341234',
-      birthDate: '19991231',
+      contact: '010-1234-1234',
+      birthDate: '1999-12-31',
       gender: Gender.female,
     );
 

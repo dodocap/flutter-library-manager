@@ -1,16 +1,14 @@
 import 'package:orm_library_manager/common/common.dart';
 
 class Member {
-  int? _id;
+  int _id;
   String _name;
   String _address;
   String _contact;
   String _birthDate;
   Gender _gender;
 
-  set id(int? value) => _id = value;
-
-  int? get id => _id;
+  int get id => _id;
   String get name => _name;
   String get address => _address;
   String get contact => _contact;
@@ -23,11 +21,26 @@ class Member {
     required String contact,
     required String birthDate,
     required Gender gender,
-  })  : _name = name,
+  })  : _id = DateTime.now().millisecondsSinceEpoch,
+        _name = name,
         _address = address,
         _contact = contact,
         _birthDate = birthDate,
         _gender = gender;
+
+  Member._internal({
+    required int id,
+    required String name,
+    required String address,
+    required String contact,
+    required String birthDate,
+    required Gender gender,
+  }) : _id = id,
+      _name = name,
+      _address = address,
+      _contact = contact,
+      _birthDate = birthDate,
+      _gender = gender;
 
   @override
   bool operator ==(Object other) =>
@@ -44,13 +57,15 @@ class Member {
   int get hashCode => _name.hashCode ^ _address.hashCode ^ _contact.hashCode ^ _birthDate.hashCode ^ _gender.hashCode;
 
   Member copyWith({
+    int? id,
     String? name,
     String? address,
     String? contact,
     String? birthDate,
     Gender? gender,
   }) {
-    return Member(
+    return Member._internal(
+      id: id ?? _id,
       name: name ?? _name,
       address: address ?? _address,
       contact: contact ?? _contact,
@@ -61,6 +76,7 @@ class Member {
 
   Map<String, dynamic> toJson() {
     return {
+      '_id' : _id,
       '_name': _name,
       '_address': _address,
       '_contact': _contact,
@@ -70,12 +86,18 @@ class Member {
   }
 
   factory Member.fromJson(Map<String, dynamic> map) {
-    return Member(
-      name: map['_name'] as String,
-      address: map['_address'] as String,
-      contact: map['_contact'] as String,
-      birthDate: map['_birthDate'] as String,
-      gender: map['_gender'] as Gender,
+    return Member._internal(
+      id: map['_id'],
+      name: map['_name'],
+      address: map['_address'],
+      contact: map['_contact'],
+      birthDate: map['_birthDate'],
+      gender: map['_gender'],
     );
+  }
+
+  @override
+  String toString() {
+    return 'Member{_id: $_id, _name: $_name, _address: $_address, _contact: $_contact, _birthDate: $_birthDate, _gender: $_gender}';
   }
 }
