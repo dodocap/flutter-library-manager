@@ -13,6 +13,9 @@ class Book {
   String get price => _price;
   String get name => _name;
 
+
+  set setBorrowed(bool isBorrowed) => _isBorrowed = isBorrowed;
+
   Book({
     required String name,
     required String price,
