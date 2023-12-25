@@ -17,29 +17,29 @@ class Member {
 
   Member({
     required String name,
-    required String address,
     required String contact,
     required String birthDate,
+    required String address,
     required Gender gender,
   })  : _id = DateTime.now().millisecondsSinceEpoch,
         _name = name,
-        _address = address,
         _contact = contact,
         _birthDate = birthDate,
+        _address = address,
         _gender = gender;
 
   Member._internal({
     required int id,
     required String name,
-    required String address,
     required String contact,
     required String birthDate,
+    required String address,
     required Gender gender,
   }) : _id = id,
       _name = name,
-      _address = address,
       _contact = contact,
       _birthDate = birthDate,
+      _address = address,
       _gender = gender;
 
   @override
@@ -48,13 +48,11 @@ class Member {
       (other is Member &&
           runtimeType == other.runtimeType &&
           _name == other._name &&
-          _address == other._address &&
           _contact == other._contact &&
-          _birthDate == other._birthDate &&
-          _gender == other._gender);
+          _birthDate == other._birthDate);
 
   @override
-  int get hashCode => _name.hashCode ^ _address.hashCode ^ _contact.hashCode ^ _birthDate.hashCode ^ _gender.hashCode;
+  int get hashCode => _name.hashCode ^ _contact.hashCode ^ _birthDate.hashCode;
 
   Member copyWith({
     int? id,
@@ -96,8 +94,21 @@ class Member {
     );
   }
 
+  String toCSV() => '$_id,$_name,$_contact,$_birthDate,$_address,${_gender.getValue()}\n';
+
+  factory Member.fromCSV(List<String> list) {
+    return Member._internal(
+      id: int.parse(list[0]),
+      name: list[1],
+      contact: list[2],
+      birthDate: list[3],
+      address: list[4],
+      gender: Gender.getByString(list[5]),
+    );
+  }
+
   @override
   String toString() {
-    return 'Member{_id: $_id, _name: $_name, _address: $_address, _contact: $_contact, _birthDate: $_birthDate, _gender: $_gender}';
+    return 'Member{_id: $_id, _name: $_name, _contact: $_contact, _birthDate: $_birthDate, _address: $_address, _gender: $_gender}';
   }
 }

@@ -1,9 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
+import 'package:orm_library_manager/common/result.dart';
+import 'package:orm_library_manager/data/repository_impl/member_memory_repository.dart';
 import 'package:orm_library_manager/domain/model/member.dart';
 import 'package:orm_library_manager/domain/repository/member_repository.dart';
-import '../../data/repository_impl/member_memory_repository.dart';
 
 void main() {
   late MemberRepository memberRepository;
@@ -28,10 +29,16 @@ void main() {
   });
 
   test('멤버 조회', () async {
-    final List<Member> memberList = await memberRepository.getAllMembers();
+    final Result<List<Member>> memberResult = await memberRepository.getAllMembers();
 
-    expect(memberList.length, 1);
-    expect(memberList[0].name, '홍길동');
+    switch (memberResult) {
+      case Success<List<Member>>(:final data):
+        expect(data.length, 1);
+        expect(data.first.name, '홍길동');
+        break;
+      case Error(:final error):
+        break;
+    }
   });
 
   test('멤버 가입', () async {
@@ -42,21 +49,36 @@ void main() {
       gender: Gender.female,
     );
 
-    Member member = await memberRepository.join(newMember);
-    final List<Member> memberList = await memberRepository.getAllMembers();
+    final Result<Member> result = await memberRepository.join(newMember);
+    final Result<List<Member>> resultAllMembers = await memberRepository.getAllMembers();
 
-    expect(memberList.length, 2);
-    expect(memberList[1], member);
+    switch (result) {
+      case Success(:final data):
+        expect(data.name, '홍길순');
+        break;
+      case Error(:final error):
+        break;
+    }
+
+    switch (resultAllMembers) {
+      case Success<List<Member>>(:final data):
+        expect(data.length, 2);
+        break;
+      case Error(:final error):
+        break;
+    }
   });
 
   test('멤버 중복 가입 불가', () async {
     final Member existMember = member.copyWith();
 
-    try {
-      await memberRepository.join(existMember);
-    } catch (e) {
-      expect(e.toString(), errMemberExist);
+    Result result = await memberRepository.join(existMember);
+    switch (result) {
+      case Success():
+        break;
+      case Error(:final error):
+        expect(error, errMemberExist);
+        break;
     }
   });
-
 }

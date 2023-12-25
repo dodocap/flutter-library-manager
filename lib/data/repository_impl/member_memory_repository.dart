@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:orm_library_manager/common/constants.dart';
+import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/domain/model/member.dart';
 import 'package:orm_library_manager/domain/repository/member_repository.dart';
 
@@ -11,21 +12,21 @@ class MemberMemoryRepository implements MemberRepository {
   }
 
   @override
-  Future<List<Member>> getAllMembers() async {
+  Future<Result<List<Member>>> getAllMembers() async {
     await _virtualDelayed();
-    return _memberList;
+    return Success(_memberList);
   }
 
   @override
-  Future<Member> join(Member member) async {
+  Future<Result<Member>> join(Member member) async {
     await _virtualDelayed();
 
     if(_memberList.contains(member)) {
-      return Future.error(errMemberExist);
+      return const Error(errMemberExist);
     }
 
     _memberList.add(member);
-    return member;
+    return Success(member);
   }
 
   @override
