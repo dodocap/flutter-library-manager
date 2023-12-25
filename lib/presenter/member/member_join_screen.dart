@@ -155,9 +155,11 @@ class _MemberJoinScreenState extends State<MemberJoinScreen> {
     );
 
     switch(result) {
-      case Success():
+      case Success(:final data):
         if (mounted) {
-          Navigator.pop(context);
+          showSimpleDialog(context, '${data.name}님\n회원 가입 성공!', () {
+            Navigator.pop(context, true);
+          });
         }
         break;
       case Error(:final error):

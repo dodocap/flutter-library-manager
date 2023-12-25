@@ -11,7 +11,6 @@ class MemberScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('회원 메뉴'),
       ),
-      body: CommonMenuScreen(menu: memberMenuMap),
     );
   }
 }

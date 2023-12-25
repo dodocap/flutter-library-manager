@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 enum Gender {
@@ -29,4 +30,24 @@ extension IterableExtension<T> on Iterable<T> {
 
 extension DateFormatter on DateTime {
   String dFormat() => DateFormat('yyyy-MM-dd').format(this);
+}
+
+void showSimpleDialog(BuildContext context, String msg, [void Function()? callback]) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(msg),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              callback?.call();
+            },
+            child: const Text('확인'),
+          ),
+        ],
+      );
+    },
+  );
 }

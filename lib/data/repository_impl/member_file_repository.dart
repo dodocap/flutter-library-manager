@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/domain/model/member.dart';
@@ -67,18 +68,42 @@ class MemberFileRepository implements MemberRepository {
   }
 
   @override
-  Future<void> cancelLastWithdraw() async {
-    return Future.value();
+  Future<Result<Member>> remove(Member member) async {
+    bool isExist = _memberList.contains(member);
+    if (!isExist) {
+      return const Error(errNotFoundMember);
+    }
+
+    Member? pendingRemoveMember = _memberList.firstWhereOrNull((e) => e.isPendingRemove());
+    if(pendingRemoveMember != null) {
+      _memberList.remove(pendingRemoveMember);
+    }
+    member.setPendingRemove();
+    await _saveFile();
+
+    return Success(member);
   }
 
-
   @override
-  Future<void> update(Member member) async {
-    return Future.value();
+  Future<Result<Member>> getPendingRemove() async {
+    Member? pendingRemoveMember = _memberList.firstWhereOrNull((member) => member.isPendingRemove());
+    if(pendingRemoveMember == null) {
+      return const Error(errNotFoundPendingRemoveMember);
+    }
+
+    return Success(pendingRemoveMember);
   }
 
   @override
-  Future<void> withdraw(Member member, int memberId) async {
-    return Future.value();
+  Future<Result<Member>> restore(Member member) async {
+    final Member? restoreMember = _memberList.firstWhereOrNull((e) => e == member);
+    if (restoreMember == null) {
+      return const Error(errNotFoundRestoreMember);
+    }
+
+    restoreMember.setPendingRemove();
+    await _saveFile();
+
+    return Success(restoreMember);
   }
 }

@@ -30,18 +30,18 @@ class MemberMemoryRepository implements MemberRepository {
   }
 
   @override
-  Future<void> cancelLastWithdraw() {
-    return Future.value();
+  Future<Result<Member>> remove(Member member) async {
+    return const Error('');
   }
 
   @override
-  Future<void> update(Member member) {
-    return Future.value();
+  Future<Result<Member>> getPendingRemove() async {
+    return const Error('');
   }
 
   @override
-  Future<void> withdraw(Member member, int memberId) {
-    return Future.value();
+  Future<Result<Member>> restore(Member member) async {
+    return const Error('');
   }
   
 }

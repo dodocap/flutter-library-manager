@@ -10,8 +10,15 @@ class MemberUseCase {
     required this.memberRepository,
   });
 
-  Future<Result<List<Member>>> getMemberList() {
-    return memberRepository.getAllMembers();
+  Future<Result<List<Member>>> getMemberList() async {
+    final Result<List<Member>> result = await memberRepository.getAllMembers();
+    switch (result) {
+      case Success<List<Member>>(:final data):
+        List<Member> newList = data.toList()..removeWhere((element) => element.isPendingRemove());
+        return Success(newList);
+      case Error():
+        return result;
+    }
   }
 
   Future<Result<Member>> joinMember
@@ -44,5 +51,17 @@ class MemberUseCase {
         contact: contact,
         birthDate: birthDate,
         gender: gender));
+  }
+
+  Future<Result<Member>> removeMember(Member member) {
+    return memberRepository.remove(member);
+  }
+
+  Future<Result<Member>> getPendingRemoveMember() {
+    return memberRepository.getPendingRemove();
+  }
+
+  Future<Result<Member>> restoreMember(Member member) {
+    return memberRepository.restore(member);
   }
 }

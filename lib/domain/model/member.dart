@@ -42,6 +42,12 @@ class Member {
       _address = address,
       _gender = gender;
 
+  void setPendingRemove() {
+    _id = -_id;
+  }
+
+  bool isPendingRemove() => _id < 0;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
