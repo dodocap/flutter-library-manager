@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/domain/model/book.dart';
 import 'package:orm_library_manager/domain/repository/book_repository.dart';
 
@@ -10,26 +11,22 @@ class BookMemoryRepository implements BookRepository {
   }
 
   @override
-  Future<List<Book>> getAllBooks() async {
+  Future<Result<List<Book>>> getAllBooks() async {
     await _virtualDelayed();
-    return _bookList;
+
+    return Success(_bookList);
   }
 
   @override
-  Future<Book> add(Book book) async {
+  Future<Result<Book>> add(Book book) async {
     await _virtualDelayed();
     _bookList.add(book);
-    return book;
+    return Success(book);
   }
 
   @override
-  Future<void> remove(Book book) async {
-    return Future.value();
-  }
-
-  @override
-  Future<void> update(Book book) async {
-    return Future.value();
+  Future<Result<Book>> remove(Book book) async {
+    return Success(book);
   }
 
 }

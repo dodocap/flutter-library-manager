@@ -3,12 +3,12 @@ class Book {
   String _name;
   String _price;
   String _isbn;
-  String _publicationDate;
+  String _publishDate;
   bool _isBorrowed;
 
   int get id => _id;
   bool get isBorrowed => _isBorrowed;
-  String get publicationDate => _publicationDate;
+  String get publishDate => _publishDate;
   String get isbn => _isbn;
   String get price => _price;
   String get name => _name;
@@ -20,12 +20,12 @@ class Book {
     required String name,
     required String price,
     required String isbn,
-    required String publicationDate,
+    required String publishDate,
   })  : _id = DateTime.now().millisecondsSinceEpoch,
         _name = name,
         _price = price,
         _isbn = isbn,
-        _publicationDate = publicationDate,
+        _publishDate = publishDate,
         _isBorrowed = false;
 
   Book._internal({
@@ -33,13 +33,13 @@ class Book {
     required String name,
     required String price,
     required String isbn,
-    required String publicationDate,
+    required String publishDate,
     required bool isBorrowed,
   }) : _id = id,
         _name = name,
         _price = price,
         _isbn = isbn,
-        _publicationDate = publicationDate,
+        _publishDate = publishDate,
         _isBorrowed = isBorrowed;
 
 
@@ -52,15 +52,28 @@ class Book {
           _name == other._name &&
           _price == other._price &&
           _isbn == other._isbn &&
-          _publicationDate == other._publicationDate &&
+          _publishDate == other._publishDate &&
           _isBorrowed == other._isBorrowed);
 
   @override
-  int get hashCode => _id.hashCode ^ _name.hashCode ^ _price.hashCode ^ _isbn.hashCode ^ _publicationDate.hashCode ^ _isBorrowed.hashCode;
+  int get hashCode => _id.hashCode ^ _name.hashCode ^ _price.hashCode ^ _isbn.hashCode ^ _publishDate.hashCode ^ _isBorrowed.hashCode;
+
+  String toCSV() => '$_id,$_name,$_price,$_publishDate,$_isbn,$_isBorrowed\n';
+
+  factory Book.fromCSV(List<String> list) {
+    return Book._internal(
+      id: int.parse(list[0]),
+      name: list[1],
+      price: list[2],
+      publishDate: list[3],
+      isbn: list[4],
+      isBorrowed: bool.parse(list[5]),
+    );
+  }
 
   @override
   String toString() {
-    return 'Book{ _id: $_id, _name: $_name, _price: $_price, _isbn: $_isbn, _publicationDate: $_publicationDate, _isBorrowed: $_isBorrowed,}';
+    return 'Book{ _id: $_id, _name: $_name, _price: $_price, _isbn: $_isbn, _publishDate: $_publishDate, _isBorrowed: $_isBorrowed,}';
   }
 
   Book copyWith({
@@ -68,7 +81,7 @@ class Book {
     String? name,
     String? price,
     String? isbn,
-    String? publicationDate,
+    String? publishDate,
     bool? isBorrowed,
   }) {
     return Book._internal(
@@ -76,7 +89,7 @@ class Book {
       name: name ?? _name,
       price: price ?? _price,
       isbn: isbn ?? _isbn,
-      publicationDate: publicationDate ?? _publicationDate,
+      publishDate: publishDate ?? _publishDate,
       isBorrowed: isBorrowed ?? _isBorrowed,
     );
   }
@@ -87,7 +100,7 @@ class Book {
       '_name': _name,
       '_price': _price,
       '_isbn': _isbn,
-      '_publicationDate': _publicationDate,
+      '_publishDate': _publishDate,
       '_isBorrowed': _isBorrowed,
     };
   }
@@ -98,7 +111,7 @@ class Book {
       name: map['_name'],
       price: map['_price'],
       isbn: map['_isbn'],
-      publicationDate: map['_publicationDate'],
+      publishDate: map['_publishDate'],
       isBorrowed: map['_isBorrowed'],
     );
   }

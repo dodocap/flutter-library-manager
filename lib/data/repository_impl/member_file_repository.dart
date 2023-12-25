@@ -34,7 +34,7 @@ class MemberFileRepository implements MemberRepository {
           }
         }
       } else {
-
+        // await _file?.delete();
       }
     } catch (e) {
       print(e);

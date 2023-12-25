@@ -5,9 +5,17 @@ const errNotFoundRestoreMember = '[오류] 복원할 회원 정보가 없습니�
 
 const errAlreadyBorrowed = '[오류] 대여중인 도서입니다';
 
+const errNotFoundBook = '[오류] 해당 도서 정보가 없습니다';
+const errFailedRemoveBook = '[오류] 도서 삭제에 실패했습니다';
+
 const errNotFoundBorrowInfo = '[오류] 회원의 해당 도서 대여 정보를 찾을 수 없습니다';
 
 const String memberFileName = 'member.csv';
 const String memberFileRowString = 'id,name,contact,birthdate,address,gender';
 const List<String> memberFileRowStringList = ['이름','연락처','나이','주소','성별'];
 final int memberFileColumnCount = memberFileRowString.split(',').length;
+
+const String bookFileName = 'book.csv';
+const String bookFileRowString = 'id,name,price,publishDate,isbn,isBorrowed';
+const List<String> bookFileRowStringList = ['제목','출간일','ISBN','대여중','가격'];
+final int bookFileColumnCount = bookFileRowString.split(',').length;

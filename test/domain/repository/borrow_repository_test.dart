@@ -28,14 +28,14 @@ void main() {
       name: '오준석의 플러터 생존코딩',
       price: '28000',
       isbn: '979-11-6224-437-1',
-      publicationDate: '2022-03-21',
+      publishDate: '2022-03-21',
     );
 
     book2 = Book(
       name: 'RxJava 프로그래밍',
       price: '25000',
       isbn: '978-89-6848-865-8',
-      publicationDate: '2019-04-01',
+      publishDate: '2019-04-01',
     );
 
     member1 = Member(

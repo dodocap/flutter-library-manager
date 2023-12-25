@@ -23,11 +23,11 @@ class _MemberListScreenState extends State<MemberListScreen> {
 
   @override
   void initState() {
-    _loadListMember();
+    _loadMemberList();
     super.initState();
   }
 
-  Future<void> _loadListMember() async {
+  Future<void> _loadMemberList() async {
     Result<List<Member>> memberList = await _memberUseCase.getMemberList();
 
     switch (memberList) {
@@ -55,7 +55,7 @@ class _MemberListScreenState extends State<MemberListScreen> {
             onPressed: () async {
               bool? result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const MemberJoinScreen()));
               if(result != null && result) {
-                await _loadListMember();
+                await _loadMemberList();
               }
             },
           ),
@@ -79,7 +79,7 @@ class _MemberListScreenState extends State<MemberListScreen> {
       ),
       body: _memberList.isEmpty
       ? const Center(
-        child: Text('회원 목록 없음', style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.grey)),)
+        child: Text('회원 목록 없음', style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.grey)))
       : SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: StickyHeader(
