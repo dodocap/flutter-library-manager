@@ -5,9 +5,11 @@ import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/domain/model/book.dart';
 import 'package:orm_library_manager/domain/model/borrow_info.dart';
+import 'package:orm_library_manager/domain/model/borrow_info_model.dart';
 import 'package:orm_library_manager/domain/model/member.dart';
 import 'package:orm_library_manager/domain/repository/book_repository.dart';
 import 'package:orm_library_manager/domain/repository/borrow_repository.dart';
+import 'package:orm_library_manager/domain/repository/member_repository.dart';
 import 'package:path_provider/path_provider.dart';
 
 class BorrowFileRepository implements BorrowRepository {
@@ -17,6 +19,8 @@ class BorrowFileRepository implements BorrowRepository {
     _loadFile();
   }
 
+  final BookRepository _bookRepository = bookRepository;
+  final MemberRepository _memberRepository = memberRepository;
   final List<BorrowInfo> _borrowList = [];
   File? _file;
 
@@ -57,8 +61,32 @@ class BorrowFileRepository implements BorrowRepository {
 
 
   @override
-  Future<Result<List<BorrowInfo>>> getAll() async {
-    return Success(_borrowList);
+  Future<Result<List<BorrowInfoModel>>> getAll() async {
+    final sw = Stopwatch()..start();
+    final result = (await Future.wait(
+        _borrowList.map((borrowInfo) async {
+          Result<Book> book = await _bookRepository.findById(borrowInfo.bookId);
+          Result<Member> member = await _memberRepository.findById(borrowInfo.memberId);
+
+          if(book is Success<Book> && member is Success<Member>) {
+            return BorrowInfoModel(
+              bookName: book.data.name,
+              memberName: member.data.name,
+              borrowDate: borrowInfo.borrowDate,
+              expireDate: borrowInfo.expireDate,
+              returnDate: borrowInfo.returnDate,
+              isFinished: borrowInfo.isFinished,
+            );
+          }
+          return null;
+        })
+    )).where((element) => element != null)
+      .cast<BorrowInfoModel>()
+      .toList();
+
+    print('getAllElapsedTime : ${sw.elapsed}');
+
+    return Success(result);
   }
 
   @override

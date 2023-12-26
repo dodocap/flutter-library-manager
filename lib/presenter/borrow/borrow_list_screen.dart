@@ -3,6 +3,7 @@ import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/domain/model/borrow_info.dart';
+import 'package:orm_library_manager/domain/model/borrow_info_model.dart';
 import 'package:orm_library_manager/domain/usecase/book_usecase.dart';
 import 'package:orm_library_manager/domain/usecase/borrow_usecase.dart';
 import 'package:orm_library_manager/domain/usecase/member_usecase.dart';
@@ -20,7 +21,7 @@ class _BorrowListScreenState extends State<BorrowListScreen> {
   final BookUseCase _bookUseCase = BookUseCase(bookRepository: bookRepository);
   final MemberUseCase _memberUseCase = MemberUseCase(memberRepository: memberRepository);
 
-  List<BorrowInfo> _borrowList = [];
+  List<BorrowInfoModel> _borrowList = [];
   bool _sortAscending = true;
   int _sortColumnIndex = 0;
 
@@ -32,9 +33,9 @@ class _BorrowListScreenState extends State<BorrowListScreen> {
   }
 
   Future<void> _loadBorrowList() async {
-    Result<List<BorrowInfo>> result = await _borrowUseCase.getBorrowList(containFinish: true);
+    Result<List<BorrowInfoModel>> result = await _borrowUseCase.getBorrowList(containFinish: true);
     switch (result) {
-      case Success<List<BorrowInfo>>(:final data):
+      case Success<List<BorrowInfoModel>>(:final data):
         setState(() {
           _borrowList = data;
         });
@@ -87,11 +88,11 @@ class _BorrowListScreenState extends State<BorrowListScreen> {
                     cells: [
                       DataCell(SizedBox(
                         width: 120,
-                        child: Text(borrowInfo.id.toString(), textAlign: TextAlign.center),
+                        child: Text(borrowInfo.memberName, textAlign: TextAlign.center),
                       )),
                       DataCell(SizedBox(
                         width: 120,
-                        child: Text(borrowInfo.memberId.toString(), textAlign: TextAlign.center),
+                        child: Text(borrowInfo.bookName, textAlign: TextAlign.center),
                       )),
                       DataCell(SizedBox(
                         width: 120,
@@ -122,19 +123,19 @@ class _BorrowListScreenState extends State<BorrowListScreen> {
     setState(() {
       switch (columnIndex) {
         case 0:
-          // _borrowList.sort((a, b) => _sortStringColumn(a.name, b.name));
+          _borrowList.sort((a, b) => _sortStringColumn(a.memberName, b.memberName));
           break;
         case 1:
-          // _borrowList.sort((a, b) => _sortStringColumn(a.publishDate, b.publishDate));
+          _borrowList.sort((a, b) => _sortStringColumn(a.bookName, b.bookName));
           break;
         case 2:
-          // _borrowList.sort((a, b) => _sortStringColumn(a.isbn, b.isbn));
+          _borrowList.sort((a, b) => _sortStringColumn(a.borrowDate, b.borrowDate));
           break;
         case 3:
-          // _borrowList.sort((a, b) => _sortStringColumn(a.isBorrowed.toString(), b.isBorrowed.toString()));
+          _borrowList.sort((a, b) => _sortStringColumn(a.expireDate, b.expireDate));
           break;
         case 4:
-          // _borrowList.sort((a, b) => _sortStringColumn(a.price, b.price));
+          _borrowList.sort((a, b) => _sortStringColumn(a.returnDate ?? '미반납', b.returnDate ?? '미반납'));
           break;
       }
 

@@ -58,6 +58,16 @@ class MemberFileRepository implements MemberRepository {
   }
 
   @override
+  Future<Result<Member>> findById(int id) async {
+    Member? findMember = _memberList.firstWhereOrNull((member) => member.id == id);
+    if (findMember == null) {
+      return const Error(errNotFoundMember);
+    }
+
+    return Success(findMember);
+  }
+
+  @override
   Future<Result<Member>> join(Member member) async {
     if(_memberList.contains(member)) {
       return const Error(errMemberExist);

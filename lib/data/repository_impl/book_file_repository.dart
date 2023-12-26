@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/domain/model/book.dart';
@@ -62,6 +63,16 @@ class BookFileRepository implements BookRepository {
   @override
   Future<Result<List<Book>>> getAllBooks() async {
     return Success(_bookList);
+  }
+
+  @override
+  Future<Result<Book>> findById(int id) async {
+    Book? findBook = _bookList.firstWhereOrNull((book) => book.id == id);
+    if(findBook == null) {
+      return const Error(errNotFoundBook);
+    }
+
+    return Success(findBook);
   }
 
   @override
