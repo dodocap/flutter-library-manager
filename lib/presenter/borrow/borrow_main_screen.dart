@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:orm_library_manager/common/common.dart';
+import 'package:orm_library_manager/presenter/borrow/borrow_list_screen.dart';
 import 'package:orm_library_manager/presenter/member/member_list_screen.dart';
 
 class BorrowMainScreen extends StatefulWidget {
@@ -42,7 +43,10 @@ class _BorrowMainScreenState extends State<BorrowMainScreen> {
           ListTile(
             title: const Text('4. 대출 현황'),
             onTap: () {
-
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const BorrowListScreen()),
+              );
             },
           ),
         ],

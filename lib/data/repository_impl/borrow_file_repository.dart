@@ -57,13 +57,8 @@ class BorrowFileRepository implements BorrowRepository {
 
 
   @override
-  Future<Result<List<BorrowInfo>>> getAllHistory() async {
-    return const Error('');
-  }
-
-  @override
-  Future<Result<List<BorrowInfo>>> getAllBorrows() async {
-    return const Error('');
+  Future<Result<List<BorrowInfo>>> getAll() async {
+    return Success(_borrowList);
   }
 
   @override

@@ -16,17 +16,10 @@ class BorrowMemoryRepository implements BorrowRepository {
   }
 
   @override
-  Future<Result<List<BorrowInfo>>> getAllHistory() async {
+  Future<Result<List<BorrowInfo>>> getAll() async {
     await _virtualDelayed();
 
     return Success(_borrowInfoList);
-  }
-
-  @override
-  Future<Result<List<BorrowInfo>>> getAllBorrows() async {
-    await _virtualDelayed();
-
-    return Success(_borrowInfoList.where((element) => !element.isFinished).toList());
   }
 
   @override
