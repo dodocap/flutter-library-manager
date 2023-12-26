@@ -34,7 +34,7 @@ extension IterableExtension<T> on Iterable<T> {
 }
 
 extension DateFormatter on DateTime {
-  String dFormat() => DateFormat('yyyy-MM-dd').format(this);
+  String dFormat() => DateFormat('yyyyMMdd').format(this);
 }
 
 void showSimpleDialog(BuildContext context, String msg, [void Function()? callback]) {

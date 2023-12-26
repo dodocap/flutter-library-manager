@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/data/repository_impl/book_file_repository.dart';
+import 'package:orm_library_manager/data/repository_impl/borrow_file_repository.dart';
 import 'package:orm_library_manager/data/repository_impl/member_file_repository.dart';
 import 'package:orm_library_manager/presenter/main/main_screen.dart';
 
@@ -9,6 +10,7 @@ void main() {
 
   memberRepository = MemberFileRepository();
   bookRepository = BookFileRepository();
+  borrowRepository = BorrowFileRepository();
 }
 
 class MyApp extends StatelessWidget {

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
+import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/domain/model/book.dart';
 import 'package:orm_library_manager/domain/model/borrow_info.dart';
 import 'package:orm_library_manager/domain/model/member.dart';
@@ -15,21 +16,21 @@ class BorrowMemoryRepository implements BorrowRepository {
   }
 
   @override
-  Future<List<BorrowInfo>> getAllHistory() async {
+  Future<Result<List<BorrowInfo>>> getAllHistory() async {
     await _virtualDelayed();
 
-    return _borrowInfoList;
+    return Success(_borrowInfoList);
   }
 
   @override
-  Future<List<BorrowInfo>> getAllBorrows() async {
+  Future<Result<List<BorrowInfo>>> getAllBorrows() async {
     await _virtualDelayed();
 
-    return _borrowInfoList.where((element) => !element.isFinished).toList();
+    return Success(_borrowInfoList.where((element) => !element.isFinished).toList());
   }
 
   @override
-  Future<BorrowInfo> borrowBook(Member member, Book book) async {
+  Future<Result<BorrowInfo>> borrowBook(Member member, Book book) async {
     await _virtualDelayed();
 
     if (book.isBorrowed) {
@@ -42,11 +43,11 @@ class BorrowMemoryRepository implements BorrowRepository {
       bookId: book.id,
     );
     _borrowInfoList.add(borrowInfo);
-    return borrowInfo;
+    return Success(borrowInfo);
   }
 
   @override
-  Future<BorrowInfo> returnBook(Member member, Book book) async {
+  Future<Result<BorrowInfo>> returnBook(Member member, Book book) async {
     await _virtualDelayed();
 
     final BorrowInfo? borrowInfo = _borrowInfoList.firstWhereOrNull((info) {
@@ -58,11 +59,11 @@ class BorrowMemoryRepository implements BorrowRepository {
     }
 
     borrowInfo.setReturn();
-    return borrowInfo;
+    return Success(borrowInfo);
   }
 
   @override
-  Future<void> renewalBook(Member member, Book book) {
+  Future<Result<BorrowInfo>> renewalBook(Member member, Book book) {
     return Future.value();
   }
 }

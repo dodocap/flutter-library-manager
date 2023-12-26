@@ -29,4 +29,13 @@ class BookMemoryRepository implements BookRepository {
     return Success(book);
   }
 
+  @override
+  Future<Result<Book>> borrow(Book book) async {
+    return const Error('');
+  }
+
+  @override
+  Future<Result<Book>> returns(Book book) async {
+    return const Error('');
+  }
 }

@@ -33,6 +33,7 @@ class MemberFileRepository implements MemberRepository {
             _memberList.add(Member.fromCSV(readLines[i].split(',').map((e) => e.trim().toLowerCase()).toList()));
           }
         }
+        print(_memberList);
       } else {
         // await _file?.delete();
       }

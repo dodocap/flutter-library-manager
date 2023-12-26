@@ -1,11 +1,12 @@
+import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/domain/model/book.dart';
 import 'package:orm_library_manager/domain/model/borrow_info.dart';
 import 'package:orm_library_manager/domain/model/member.dart';
 
 abstract interface class BorrowRepository {
-  Future<List<BorrowInfo>> getAllHistory();
-  Future<List<BorrowInfo>> getAllBorrows();
-  Future<BorrowInfo> borrowBook(Member member, Book book);
-  Future<BorrowInfo> returnBook(Member member, Book book);
-  Future<void> renewalBook(Member member, Book book);
+  Future<Result<List<BorrowInfo>>> getAllHistory();
+  Future<Result<List<BorrowInfo>>> getAllBorrows();
+  Future<Result<BorrowInfo>> borrowBook(Member member, Book book);
+  Future<Result<BorrowInfo>> returnBook(Member member, Book book);
+  Future<Result<BorrowInfo>> renewalBook(Member member, Book book);
 }

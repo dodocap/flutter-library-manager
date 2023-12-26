@@ -13,8 +13,11 @@ class BookUseCase {
     Result<List<Book>> result = await bookRepository.getAllBooks();
     switch (result) {
       case Success(:final data):
-        List<Book> newList = data.toList()..removeWhere((element) => element.isBorrowed);
-        return Success(newList);
+        if(canBorrow) {
+          List<Book> newList = data.toList()..removeWhere((element) => element.isBorrowed);
+          return Success(newList);
+        }
+        return Success(data);
       case Error(:final error):
         return result;
     }

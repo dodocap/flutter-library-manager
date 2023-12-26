@@ -32,6 +32,7 @@ class BookFileRepository implements BookRepository {
             _bookList.add(Book.fromCSV(readLines[i].split(',').map((e) => e.trim().toLowerCase()).toList()));
           }
         }
+        print(_bookList);
       } else {
         // await _file?.delete();
       }
@@ -73,6 +74,30 @@ class BookFileRepository implements BookRepository {
       return const Error(errFailedRemoveBook);
     }
 
+    await _saveFile();
+
+    return Success(book);
+  }
+
+  @override
+  Future<Result<Book>> borrow(Book book) async {
+    if(book.isBorrowed) {
+      return const Error(errAlreadyBorrowed);
+    }
+
+    book.setBorrowed = true;
+    await _saveFile();
+
+    return Success(book);
+  }
+
+  @override
+  Future<Result<Book>> returns(Book book) async {
+    if(!book.isBorrowed) {
+      return const Error(errAlreadyReturned);
+    }
+
+    book.setBorrowed = false;
     await _saveFile();
 
     return Success(book);
