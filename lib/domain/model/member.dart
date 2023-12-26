@@ -85,7 +85,7 @@ class Member {
       '_address': _address,
       '_contact': _contact,
       '_birthDate': _birthDate,
-      '_gender': _gender,
+      '_gender': _gender.genderString,
     };
   }
 
@@ -96,11 +96,11 @@ class Member {
       address: map['_address'],
       contact: map['_contact'],
       birthDate: map['_birthDate'],
-      gender: map['_gender'],
+      gender: Gender.getByString(map['_gender']),
     );
   }
 
-  String toCSV() => '$_id,$_name,$_contact,$_birthDate,$_address,${_gender.getValue()}\n';
+  String toCSV() => '$_id,$_name,$_contact,$_birthDate,$_address,${_gender.genderString}\n';
 
   factory Member.fromCSV(List<String> list) {
     return Member._internal(

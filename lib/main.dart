@@ -4,6 +4,7 @@ import 'package:orm_library_manager/data/repository_impl/book_file_repository.da
 import 'package:orm_library_manager/data/repository_impl/borrow_file_repository.dart';
 import 'package:orm_library_manager/data/repository_impl/member_file_repository.dart';
 import 'package:orm_library_manager/presenter/main/main_screen.dart';
+import 'package:orm_library_manager/presenter/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,13 +19,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: routes,
       title: '도서관리 프로그램',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MainScreen(),
     );
   }
 }

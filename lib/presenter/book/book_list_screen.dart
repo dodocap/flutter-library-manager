@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/repositories.dart';
@@ -64,7 +67,7 @@ class _BookListScreenState extends State<BookListScreen> {
           IconButton(
             icon: const Icon(Icons.bookmark_add_outlined),
             onPressed: () async {
-              bool? result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const BookAddScreen()));
+              bool? result = await context.push(Uri(path: '/book/add').toString());
               if(result != null && result) {
                 await _loadBookList();
               }
@@ -194,16 +197,14 @@ class _BookListScreenState extends State<BookListScreen> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BorrowResultScreen(
-                            member: widget.member!,
-                            book: book,
-                          ),
-                      ),
-                    (route) => false,
+                  context.go(
+                      Uri(
+                        path: '/result',
+                        queryParameters: {
+                          'member': jsonEncode(widget.member!.toJson()),
+                          'book': jsonEncode(book.toJson())
+                        }
+                      ).toString()
                   );
                 },
                 child: const Text('예', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),

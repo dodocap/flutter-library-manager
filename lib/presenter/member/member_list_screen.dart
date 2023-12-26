@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/repositories.dart';
@@ -61,8 +64,8 @@ class _MemberListScreenState extends State<MemberListScreen> {
             IconButton(
               icon: const Icon(Icons.add_reaction_outlined),
               onPressed: () async {
-                bool? result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const MemberJoinScreen()));
-                if(result != null && result) {
+                bool? result = await context.push(Uri(path: '/member/join').toString());
+                if (result != null && result) {
                   await _loadMemberList();
                 }
               },
@@ -219,10 +222,13 @@ class _MemberListScreenState extends State<MemberListScreen> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => BookListScreen(mode: ScreenMode.selector, member: member)),
-                  );
+                  context.push(
+                    Uri(
+                      path: '/borrow/member/book',
+                      queryParameters: {
+                        'member': jsonEncode(member.toJson())
+                      }
+                    ).toString());
                 },
                 child: const Text('예', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
               ),

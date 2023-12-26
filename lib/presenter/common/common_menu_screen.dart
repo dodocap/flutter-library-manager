@@ -14,7 +14,7 @@ class CommonMenuScreen extends StatelessWidget {
         children: menu.entries.map((e) {
       return ListTile(
         title: Text(e.key),
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => e.value)),
+        onTap: () { },
       );
     }).toList());
   }

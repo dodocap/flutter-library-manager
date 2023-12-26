@@ -18,8 +18,6 @@ class BorrowListScreen extends StatefulWidget {
 
 class _BorrowListScreenState extends State<BorrowListScreen> {
   final BorrowUseCase _borrowUseCase = BorrowUseCase(borrowRepository: borrowRepository);
-  final BookUseCase _bookUseCase = BookUseCase(bookRepository: bookRepository);
-  final MemberUseCase _memberUseCase = MemberUseCase(memberRepository: memberRepository);
 
   List<BorrowInfoModel> _borrowList = [];
   bool _sortAscending = true;
@@ -104,9 +102,10 @@ class _BorrowListScreenState extends State<BorrowListScreen> {
                       )),
                       DataCell(SizedBox(
                         width: 120,
-                        child: Text(borrowInfo.returnDate != 'null'
-                            ? _getFormattedDate(borrowInfo.returnDate!)
-                            : '미반납', textAlign: TextAlign.center),
+                        child: Text(
+                            (borrowInfo.returnDate == null || borrowInfo.returnDate == 'null')
+                            ? '미반납'
+                            : _getFormattedDate(borrowInfo.returnDate!), textAlign: TextAlign.center),
                       )),
                     ],
                     onLongPress: () {

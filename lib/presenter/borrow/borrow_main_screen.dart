@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/presenter/borrow/borrow_list_screen.dart';
 import 'package:orm_library_manager/presenter/member/member_list_screen.dart';
@@ -22,31 +23,25 @@ class _BorrowMainScreenState extends State<BorrowMainScreen> {
           ListTile(
             title: const Text('1. 도서 대출'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MemberListScreen(mode: ScreenMode.selector)),
-              );
+              context.push(Uri(path: '/borrow/member').toString());
             },
           ),
           ListTile(
             title: const Text('2. 대출 반납'),
             onTap: () {
-
+              context.push(Uri(path: '/borrow/return').toString());
             },
           ),
           ListTile(
             title: const Text('3. 대출 연장'),
             onTap: () {
-
+              context.push(Uri(path: '/borrow/renewal').toString());
             },
           ),
           ListTile(
             title: const Text('4. 대출 현황'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const BorrowListScreen()),
-              );
+              context.push(Uri(path: '/borrow/history').toString());
             },
           ),
         ],
