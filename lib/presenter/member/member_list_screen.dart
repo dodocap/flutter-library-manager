@@ -5,14 +5,21 @@ import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/domain/model/member.dart';
 import 'package:orm_library_manager/domain/usecase/member_usecase.dart';
+import 'package:orm_library_manager/presenter/book/book_list_screen.dart';
 import 'package:orm_library_manager/presenter/member/member_join_screen.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class MemberListScreen extends StatefulWidget {
-  const MemberListScreen({super.key});
+  final ScreenMode mode;
+
+  const MemberListScreen({
+    super.key,
+    required this.mode,
+  });
 
   @override
   State<MemberListScreen> createState() => _MemberListScreenState();
+
 }
 
 class _MemberListScreenState extends State<MemberListScreen> {
@@ -49,33 +56,34 @@ class _MemberListScreenState extends State<MemberListScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('회원 조회'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_reaction_outlined),
-            onPressed: () async {
-              bool? result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const MemberJoinScreen()));
-              if(result != null && result) {
-                await _loadMemberList();
-              }
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.restore_outlined),
-            onPressed: () async {
-              Result<Member> result = await _memberUseCase.getPendingRemoveMember();
-              switch (result) {
-                case Success<Member>(:final data):
-                  _showRestoreMemberDialog(data);
-                  break;
-                case Error(:final error):
-                  if (context.mounted) {
-                    showSimpleDialog(context, error);
-                  }
-                  break;
-              }
-            },
-          ),
-        ],
+        actions: widget.mode == ScreenMode.editor
+        ? [
+            IconButton(
+              icon: const Icon(Icons.add_reaction_outlined),
+              onPressed: () async {
+                bool? result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const MemberJoinScreen()));
+                if(result != null && result) {
+                  await _loadMemberList();
+                }
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.restore_outlined),
+              onPressed: () async {
+                Result<Member> result = await _memberUseCase.getPendingRemoveMember();
+                switch (result) {
+                  case Success<Member>(:final data):
+                    _showRestoreMemberDialog(data);
+                    break;
+                  case Error(:final error):
+                    if (context.mounted) {
+                      showSimpleDialog(context, error);
+                    }
+                    break;
+                }
+              },
+            ),
+        ] : null,
       ),
       body: _memberList.isEmpty
       ? const Center(
@@ -128,7 +136,14 @@ class _MemberListScreenState extends State<MemberListScreen> {
                     )),
                   ],
                   onLongPress: () {
-                    _showDeleteMemberDialog(member);
+                    switch(widget.mode) {
+                      case ScreenMode.selector:
+                        _showSelectMemberDialog(member);
+                        break;
+                      case ScreenMode.editor:
+                        _showDeleteMemberDialog(member);
+                        break;
+                    }
                   }
                 );
               }).toList(),
@@ -186,6 +201,36 @@ class _MemberListScreenState extends State<MemberListScreen> {
     final aValue = _sortAscending ? a.toLowerCase() : a.toUpperCase();
     final bValue = _sortAscending ? b.toLowerCase() : b.toUpperCase();
     return aValue.compareTo(bValue);
+  }
+
+  void _showSelectMemberDialog(Member member) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(child: Text('${member.name} 회원님이\n도서대출을 신청합니까?')),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('아니요', style: TextStyle(color: Colors.black87),),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BookListScreen(mode: ScreenMode.selector, member: member)),
+                  );
+                },
+                child: const Text('예', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void _showDeleteMemberDialog(Member member) {

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:orm_library_manager/common/menu.dart';
-import 'package:orm_library_manager/presenter/common/common_menu_screen.dart';
 
 class MemberScreen extends StatelessWidget {
   const MemberScreen({super.key});
@@ -9,7 +7,7 @@ class MemberScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('회원 메뉴'),
+        title: const Text('회원 메뉴'),
       ),
     );
   }

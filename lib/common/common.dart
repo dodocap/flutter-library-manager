@@ -18,6 +18,11 @@ enum Gender {
   }
 }
 
+enum ScreenMode {
+  selector,
+  editor,
+}
+
 extension IterableExtension<T> on Iterable<T> {
   T? firstWhereOrNull(bool Function(T) test) {
     try {

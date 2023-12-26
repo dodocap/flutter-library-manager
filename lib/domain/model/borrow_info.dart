@@ -1,11 +1,11 @@
 import 'package:orm_library_manager/common/common.dart';
 
 class BorrowInfo {
-  int _id;
-  int _memberId;
-  int _bookId;
-  String _borrowDate;
-  String _expireDate;
+  final int _id;
+  final int _memberId;
+  final int _bookId;
+  final String _borrowDate;
+  final String _expireDate;
   String? _returnDate;
   bool _isFinished;
 

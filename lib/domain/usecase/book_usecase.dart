@@ -9,8 +9,15 @@ class BookUseCase {
     required this.bookRepository,
   });
 
-  Future<Result<List<Book>>> getBookList() {
-    return bookRepository.getAllBooks();
+  Future<Result<List<Book>>> getBookList({required bool canBorrow}) async {
+    Result<List<Book>> result = await bookRepository.getAllBooks();
+    switch (result) {
+      case Success(:final data):
+        List<Book> newList = data.toList()..removeWhere((element) => element.isBorrowed);
+        return Success(newList);
+      case Error(:final error):
+        return result;
+    }
   }
 
   Future<Result<Book>> addBook({

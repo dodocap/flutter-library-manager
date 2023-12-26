@@ -4,15 +4,25 @@ import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/domain/model/book.dart';
+import 'package:orm_library_manager/domain/model/member.dart';
 import 'package:orm_library_manager/domain/usecase/book_usecase.dart';
 import 'package:orm_library_manager/presenter/book/book_add_screen.dart';
+import 'package:orm_library_manager/presenter/borrow/borrow_result_screen.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class BookListScreen extends StatefulWidget {
-  const BookListScreen({super.key});
+  final ScreenMode mode;
+  final Member? member;
+
+  const BookListScreen({
+    super.key,
+    required this.mode,
+    this.member,
+  });
 
   @override
   State<BookListScreen> createState() => _BookListScreenState();
+
 }
 
 class _BookListScreenState extends State<BookListScreen> {
@@ -28,7 +38,7 @@ class _BookListScreenState extends State<BookListScreen> {
   }
 
   Future<void> _loadBookList() async {
-    Result<List<Book>> memberList = await _bookUseCase.getBookList();
+    Result<List<Book>> memberList = await _bookUseCase.getBookList(canBorrow: widget.mode == ScreenMode.selector);
 
     switch (memberList) {
       case Success<List<Book>>(:final data):
@@ -49,7 +59,8 @@ class _BookListScreenState extends State<BookListScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('도서 조회'),
-        actions: [
+        actions: widget.mode == ScreenMode.editor
+        ? [
           IconButton(
             icon: const Icon(Icons.bookmark_add_outlined),
             onPressed: () async {
@@ -59,7 +70,8 @@ class _BookListScreenState extends State<BookListScreen> {
               }
             },
           ),
-        ],
+        ]
+        : null,
       ),
       body: _bookList.isEmpty
           ? const Center(child: Text('도서 목록 없음', style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.grey)))
@@ -118,7 +130,14 @@ class _BookListScreenState extends State<BookListScreen> {
                             )),
                           ],
                           onLongPress: () {
-                            _showDeleteBookDialog(book);
+                            switch (widget.mode) {
+                              case ScreenMode.selector:
+                                _showSelectBookDialog(book);
+                                break;
+                              case ScreenMode.editor:
+                                _showDeleteBookDialog(book);
+                                break;
+                            }
                           });
                     }).toList(),
                   ),
@@ -157,6 +176,43 @@ class _BookListScreenState extends State<BookListScreen> {
     final aValue = _sortAscending ? a.toLowerCase() : a.toUpperCase();
     final bValue = _sortAscending ? b.toLowerCase() : b.toUpperCase();
     return aValue.compareTo(bValue);
+  }
+
+  void _showSelectBookDialog(Book book) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(child: Text('${book.name} 도서를\n대여하시겠습니까?')),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('아니요', style: TextStyle(color: Colors.black87),),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BorrowResultScreen(
+                            member: widget.member!,
+                            book: book,
+                          ),
+                      ),
+                    (route) => false,
+                  );
+                },
+                child: const Text('예', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void _showDeleteBookDialog(Book book) {
