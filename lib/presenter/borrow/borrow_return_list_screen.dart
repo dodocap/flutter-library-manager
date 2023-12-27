@@ -38,11 +38,8 @@ class _BorrowReturnListScreenState extends State<BorrowReturnListScreen> {
 
     switch (model) {
       case Success<List<BorrowInfoModel>>(:final data):
-        setState(() {
-          _borrowBookList = data;
-        });
-        // TODO setState삭제하고 아래 함수 호출(내부에 setState있음)
-        //_onSortColumn(columnIndex);
+        _borrowBookList = data;
+        _onSortColumn(_sortColumnIndex);
         break;
       case Error(:final error):
         break;
@@ -51,13 +48,14 @@ class _BorrowReturnListScreenState extends State<BorrowReturnListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width / 3;
     return Scaffold(
       appBar: AppBar(
         title: Text('대출 반납'),
       ),
       body: _borrowBookList.isEmpty
           ? const Center(
-          child: Text('대출 목록 없음', style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.grey)))
+          child: Text('회원 목록 없음', style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.grey)))
           : SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: StickyHeader(
@@ -67,9 +65,9 @@ class _BorrowReturnListScreenState extends State<BorrowReturnListScreen> {
             sortAscending: _sortAscending,
             sortColumnIndex: _sortColumnIndex,
             showBottomBorder: true,
-            columns: memberFileRowStringList.map((e) {
+            columns: borrowInfoRowStringList.map((e) {
               return DataColumn(
-                label: SizedBox(width: 102, child: Text(e, textAlign: TextAlign.center,)),
+                label: SizedBox(width: width - 18, child: Text(e, textAlign: TextAlign.center,)),
                 onSort: (columnIndex, ascending) {
                   _sortColumnIndex = columnIndex;
                   _sortAscending = ascending;
@@ -84,28 +82,22 @@ class _BorrowReturnListScreenState extends State<BorrowReturnListScreen> {
               columnSpacing: 0,
               horizontalMargin: 0,
               headingRowHeight: 0,
-              columns: List.generate(5, (index) => const DataColumn(label: Spacer())),
+              columns: List.generate(3, (index) => const DataColumn(label: Spacer())),
               rows: _borrowBookList.map((borrowInfo) {
                 return DataRow(
                     cells: [
-                      DataCell(SizedBox(
-                        width: 120,
+                      DataCell(SizedBox(width: width,
                         child: Text(borrowInfo.bookName, textAlign: TextAlign.center),
                       )),
-                      DataCell(SizedBox(width: 120,
+                      DataCell(SizedBox(width: width,
                         child: Text(borrowInfo.borrowDate, textAlign: TextAlign.center),
                       )),
-                      DataCell(SizedBox(width: 120,
+                      DataCell(SizedBox(width: width,
                         child: Text(borrowInfo.expireDate, textAlign: TextAlign.center),
-                      )),
-                      DataCell(SizedBox(width: 120,
-                        child: Text(borrowInfo.isFinished.toString(), textAlign: TextAlign.center),
-                      )),
-                      DataCell(SizedBox(width: 120,
-                        child: Text(borrowInfo.memberName, textAlign: TextAlign.center),
                       )),
                     ],
                     onLongPress: () {
+
                     }
                 );
               }).toList(),
@@ -119,19 +111,13 @@ class _BorrowReturnListScreenState extends State<BorrowReturnListScreen> {
     setState(() {
       switch (columnIndex) {
         case 0:
-          // model.sort((a, b) => _sortStringColumn(a.name, b.name));
+          _borrowBookList.sort((a, b) => _sortStringColumn(a.bookName, b.bookName));
           break;
         case 1:
-          // model.sort((a, b) => _sortStringColumn(a.contact, b.contact));
+          _borrowBookList.sort((a, b) => _sortStringColumn(a.borrowDate, b.borrowDate));
           break;
         case 2:
-          // model.sort((a, b) => _sortStringColumn(a.birthDate, b.birthDate));
-          break;
-        case 3:
-          // model.sort((a, b) => _sortStringColumn(a.address, b.address));
-          break;
-        case 4:
-          // model.sort((a, b) => _sortStringColumn(a.gender.genderString, b.gender.genderString));
+          _borrowBookList.sort((a, b) => _sortStringColumn(a.expireDate, b.expireDate));
           break;
       }
 

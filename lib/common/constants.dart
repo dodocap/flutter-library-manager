@@ -25,3 +25,5 @@ const String borrowFileName = 'borrow.csv';
 const String borrowFileRowString = 'id,memberId,bookId,borrowDate,expireDate,returnDate,isFinished';
 const List<String> borrowFileRowStringList = ['회원명','도서명','대출일','만료일','반납일'];
 final int borrowFileColumnCount = borrowFileRowString.split(',').length;
+
+const List<String> borrowInfoRowStringList = ['도서명','대출일','만료일'];
