@@ -11,19 +11,19 @@ import 'package:orm_library_manager/domain/model/member.dart';
 import 'package:orm_library_manager/domain/usecase/borrow_usecase.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
-class BorrowReturnListScreen extends StatefulWidget {
+class ReturnListScreen extends StatefulWidget {
   final Member member;
 
-  const BorrowReturnListScreen({
+  const ReturnListScreen({
     super.key,
     required this.member,
   });
 
   @override
-  State<BorrowReturnListScreen> createState() => _BorrowReturnListScreenState();
+  State<ReturnListScreen> createState() => _ReturnListScreenState();
 }
 
-class _BorrowReturnListScreenState extends State<BorrowReturnListScreen> {
+class _ReturnListScreenState extends State<ReturnListScreen> {
   final BorrowUseCase _borrowUseCase = BorrowUseCase(borrowRepository: borrowRepository);
   List<BorrowInfoModel> _borrowBookList = [];
   bool _sortAscending = true;
@@ -37,7 +37,7 @@ class _BorrowReturnListScreenState extends State<BorrowReturnListScreen> {
   }
 
   Future<void> _loadBorrowList() async {
-    Result<List<BorrowInfoModel>> model = await _borrowUseCase.getBorrowList(containFinish: false);
+    Result<List<BorrowInfoModel>> model = await _borrowUseCase.getBorrowListByMember(member: widget.member);
 
     switch (model) {
       case Success<List<BorrowInfoModel>>(:final data):
