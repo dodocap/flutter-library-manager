@@ -26,6 +26,7 @@ class MainScreen extends StatelessWidget {
                   onPressed: () => context.push(Uri(path: '/borrow').toString()),
                   icon: const Icon(Icons.local_library, size: 75),
                   label: const Text('대출관리', style: TextStyle(fontSize: 25))),
+              SizedBox(height: 50,)
             ],
           ),
         ),

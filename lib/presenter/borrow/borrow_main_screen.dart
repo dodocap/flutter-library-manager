@@ -18,33 +18,32 @@ class _BorrowMainScreenState extends State<BorrowMainScreen> {
       appBar: AppBar(
         title: const Text('대출 관리'),
       ),
-      body: Column(
-        children: [
-          ListTile(
-            title: const Text('1. 도서 대출'),
-            onTap: () {
-              context.push(Uri(path: '/borrow/member').toString());
-            },
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 75.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextButton.icon(
+                  onPressed: () => context.push(Uri(path: '/borrow/member').toString()),
+                  icon: const Icon(Icons.library_add, size: 75),
+                  label: const Text('도서대출', style: TextStyle(fontSize: 25))),
+              TextButton.icon(
+                  onPressed: () => context.push(Uri(path: '/borrow/return').toString()),
+                  icon: const Icon(Icons.flip_to_back, size: 75),
+                  label: const Text('도서반납', style: TextStyle(fontSize: 25))),
+              TextButton.icon(
+                  onPressed: () => context.push(Uri(path: '/borrow/renewal').toString()),
+                  icon: const Icon(Icons.post_add, size: 75),
+                  label: const Text('대출연장', style: TextStyle(fontSize: 25))),
+              TextButton.icon(
+                  onPressed: () => context.push(Uri(path: '/borrow/history').toString()),
+                  icon: const Icon(Icons.history_edu, size: 75),
+                  label: const Text('대출현황', style: TextStyle(fontSize: 25))),
+              SizedBox(height: 50,)
+            ],
           ),
-          ListTile(
-            title: const Text('2. 대출 반납'),
-            onTap: () {
-              context.push(Uri(path: '/borrow/return').toString());
-            },
-          ),
-          ListTile(
-            title: const Text('3. 대출 연장'),
-            onTap: () {
-              context.push(Uri(path: '/borrow/renewal').toString());
-            },
-          ),
-          ListTile(
-            title: const Text('4. 대출 현황'),
-            onTap: () {
-              context.push(Uri(path: '/borrow/history').toString());
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
