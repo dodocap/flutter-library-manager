@@ -154,6 +154,13 @@ class _MemberListScreenState extends State<MemberListScreen> {
                             '/borrow/return/book'
                         );
                         break;
+                      case ScreenMode.selectorRenewal:
+                        _showSelectMemberDialog(
+                            member,
+                            '${member.name} 회원님이\n도서연장을 신청합니까?',
+                            '/borrow/renewal/book'
+                        );
+                        break;
                       case ScreenMode.editor:
                         _showDeleteMemberDialog(member);
                         break;

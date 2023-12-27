@@ -15,8 +15,9 @@ enum Gender {
 }
 
 enum ScreenMode {
-  selectorReturner('반납'),
   selectorBurrower('대출'),
+  selectorReturner('반납'),
+  selectorRenewal('연장'),
   editor('편집');
 
   const ScreenMode(this.modeString);

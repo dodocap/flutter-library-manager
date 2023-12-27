@@ -137,11 +137,12 @@ class _BookListScreenState extends State<BookListScreen> {
                               case ScreenMode.selectorBurrower:
                                 _showSelectBookDialog(book, '${book.name} 도서를\n대여하시겠습니까?');
                                 break;
-                              case ScreenMode.selectorReturner:
-                                _showSelectBookDialog(book, '${book.name} 도서를\n반납하시겠습니까?');
-                                break;
                               case ScreenMode.editor:
                                 _showDeleteBookDialog(book);
+                                break;
+                              case ScreenMode.selectorReturner:
+                              case ScreenMode.selectorRenewal:
+                                // Do Nothing
                                 break;
                             }
                           });

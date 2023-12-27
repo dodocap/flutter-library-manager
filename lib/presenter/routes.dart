@@ -9,8 +9,9 @@ import 'package:orm_library_manager/presenter/book/book_add_screen.dart';
 import 'package:orm_library_manager/presenter/book/book_list_screen.dart';
 import 'package:orm_library_manager/presenter/borrow/borrow_list_screen.dart';
 import 'package:orm_library_manager/presenter/borrow/borrow_main_screen.dart';
-import 'package:orm_library_manager/presenter/borrow/borrow_renewal_screen.dart';
+import 'package:orm_library_manager/presenter/renewal/renewal_list_screen.dart';
 import 'package:orm_library_manager/presenter/borrow/borrow_result_screen.dart';
+import 'package:orm_library_manager/presenter/renewal/renewal_result_screen.dart';
 import 'package:orm_library_manager/presenter/return/return_list_screen.dart';
 import 'package:orm_library_manager/presenter/main/main_screen.dart';
 import 'package:orm_library_manager/presenter/member/member_join_screen.dart';
@@ -47,12 +48,18 @@ final routes = GoRouter(
                   GoRoute(path: 'book', builder: (_, state) {
                     final Member member = Member.fromJson(jsonDecode(state.uri.queryParameters['member']!));
                     return ReturnListScreen(member: member);
-                    // return BorrowReturnScreen(mode: ScreenMode.selectorReturner, member: member);
                   }),
                 ]
               ),
-              GoRoute(path: 'renewal', builder: (_, __) => BorrowRenewalScreen()),
-              GoRoute(path: 'history', builder: (_, __) => BorrowListScreen()),
+              GoRoute(path: 'renewal', builder: (_, __) => const MemberListScreen(mode: ScreenMode.selectorRenewal),
+                routes: [
+                  GoRoute(path: 'book', builder: (_, state) {
+                    final Member member = Member.fromJson(jsonDecode(state.uri.queryParameters['member']!));
+                    return RenewalListScreen(member: member);
+                  }),
+                ]
+              ),
+              GoRoute(path: 'history', builder: (_, __) => const BorrowListScreen()),
             ],
           ),
           GoRoute(path: 'resultBorrow', builder: (_, state) {
@@ -63,6 +70,10 @@ final routes = GoRouter(
           GoRoute(path: 'resultReturn', builder: (_, state) {
             final BorrowInfoModel borrowInfoModel = BorrowInfoModel.fromJson(jsonDecode(state.uri.queryParameters['borrowInfoModel']!));
             return ReturnResultScreen(borrowInfoModel: borrowInfoModel);
+          }),
+          GoRoute(path: 'resultRenewal', builder: (_, state) {
+            final BorrowInfoModel borrowInfoModel = BorrowInfoModel.fromJson(jsonDecode(state.uri.queryParameters['borrowInfoModel']!));
+            return RenewalResultScreen(borrowInfoModel: borrowInfoModel);
           }),
         ],
       ),

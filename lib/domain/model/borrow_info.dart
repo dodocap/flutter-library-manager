@@ -5,7 +5,7 @@ class BorrowInfo {
   final int _memberId;
   final int _bookId;
   final String _borrowDate;
-  final String _expireDate;
+  String _expireDate;
   String? _returnDate;
   bool _isFinished;
 
@@ -46,6 +46,10 @@ class BorrowInfo {
   void setReturn() {
     _returnDate = DateTime.now().dFormat();
     _isFinished = true;
+  }
+
+  void renewalDate(String expireDate) {
+    _expireDate = expireDate;
   }
 
   @override

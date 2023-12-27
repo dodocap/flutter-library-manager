@@ -9,5 +9,5 @@ abstract interface class BorrowRepository {
   Future<Result<List<BorrowInfoModel>>> getByMember(Member member);
   Future<Result<BorrowInfo>> borrowBook(Member member, Book book);
   Future<Result<BorrowInfo>> returnBook(BorrowInfoModel borrowInfoModel);
-  Future<Result<BorrowInfo>> renewalBook(Member member, Book book);
+  Future<Result<BorrowInfo>> renewalBook(BorrowInfoModel borrowInfoModel);
 }

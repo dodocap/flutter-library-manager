@@ -1,3 +1,4 @@
+import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/domain/model/book.dart';
 import 'package:orm_library_manager/domain/model/borrow_info.dart';
@@ -47,5 +48,30 @@ class BorrowUseCase {
 
   Future<Result<BorrowInfo>> returnBook(BorrowInfoModel borrowInfoModel) async {
     return borrowRepository.returnBook(borrowInfoModel);
+  }
+
+  Future<Result<BorrowInfo>> renewalBook(BorrowInfoModel borrowInfoModel) async {
+    bool canRenewal = _canRenewal(borrowInfoModel.borrowDate, borrowInfoModel.expireDate);
+
+    if (!canRenewal) {
+      return const Error(errNotAnymoreRenewal);
+    }
+
+    return borrowRepository.renewalBook(borrowInfoModel);
+  }
+
+  bool _canRenewal(String borrowDateString, String expireDateString) {
+    int borrowYear = int.parse(borrowDateString.substring(0, 4));
+    int borrowMonth = int.parse(borrowDateString.substring(4, 6));
+    int borrowDay = int.parse(borrowDateString.substring(6, 8));
+
+    int expireYear = int.parse(expireDateString.substring(0, 4));
+    int expireMonth = int.parse(expireDateString.substring(4, 6));
+    int expireDay = int.parse(expireDateString.substring(6, 8));
+
+    final DateTime borrowDate = DateTime(borrowYear, borrowMonth, borrowDay);
+    final DateTime expireDate = DateTime(expireYear, expireMonth, expireDay);
+
+    return expireDate.difference(borrowDate).inDays == expireDefaultDate;
   }
 }

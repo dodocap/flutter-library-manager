@@ -1,3 +1,7 @@
+const expireDefaultDate = 14;
+const expireMaximumDate = 21;
+const errNotAnymoreRenewal = '[오류] 연장을 할 수 없습니다';
+
 const errMemberExist = '[오류] 동일한 회원이 존재합니다';
 const errNotFoundMember = '[오류] 해당 회원 정보가 없습니다';
 const errNotFoundPendingRemoveMember = '[오류] 마지막으로 삭제한 회원 정보가 없습니다';

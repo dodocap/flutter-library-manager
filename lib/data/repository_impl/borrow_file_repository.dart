@@ -153,7 +153,22 @@ class BorrowFileRepository implements BorrowRepository {
   }
 
   @override
-  Future<Result<BorrowInfo>> renewalBook(Member member, Book book) async {
-    return const Error('');
+  Future<Result<BorrowInfo>> renewalBook(BorrowInfoModel borrowInfoModel) async {
+    BorrowInfo? findBorrowInfo = _borrowList.firstWhereOrNull((e) => e.id == borrowInfoModel.id);
+
+    if (findBorrowInfo == null) {
+      return const Error(errNotFoundBorrowInfo);
+    }
+
+    String addDateString = DateTime(
+        int.parse(findBorrowInfo.expireDate.substring(0, 4)),
+        int.parse(findBorrowInfo.expireDate.substring(4, 6)),
+        int.parse(findBorrowInfo.expireDate.substring(6, 8))
+    ).add(const Duration(days: expireMaximumDate - expireDefaultDate)).dFormat();
+
+    findBorrowInfo.renewalDate(addDateString);
+    await _saveFile();
+
+    return Success(findBorrowInfo);
   }
 }
