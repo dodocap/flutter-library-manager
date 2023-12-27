@@ -22,7 +22,7 @@ final int memberFileColumnCount = memberFileRowString.split(',').length;
 
 const String bookFileName = 'book.csv';
 const String bookFileRowString = 'id,name,price,publishDate,isbn,isBorrowed';
-const List<String> bookFileRowStringList = ['제목','출간일','ISBN','대여중','가격'];
+const List<String> bookFileRowStringList = ['제목','출간일','대여중','ISBN','가격'];
 final int bookFileColumnCount = bookFileRowString.split(',').length;
 
 const String borrowFileName = 'borrow.csv';

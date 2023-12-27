@@ -117,15 +117,15 @@ class _BookListScreenState extends State<BookListScreen> {
                             )),
                             DataCell(SizedBox(
                               width: 120,
-                              child: Text(book.publishDate, textAlign: TextAlign.center),
-                            )),
-                            DataCell(SizedBox(
-                              width: 120,
-                              child: Text(book.isbn, textAlign: TextAlign.center),
+                              child: Text(_calculateDate(book.publishDate), textAlign: TextAlign.center),
                             )),
                             DataCell(SizedBox(
                               width: 120,
                               child: Text(book.isBorrowed ? '대여중' : '대여가능', textAlign: TextAlign.center),
+                            )),
+                            DataCell(SizedBox(
+                              width: 120,
+                              child: Text(book.isbn, textAlign: TextAlign.center),
                             )),
                             DataCell(SizedBox(
                               width: 120,
@@ -163,10 +163,10 @@ class _BookListScreenState extends State<BookListScreen> {
           _bookList.sort((a, b) => _sortStringColumn(a.publishDate, b.publishDate));
           break;
         case 2:
-          _bookList.sort((a, b) => _sortStringColumn(a.isbn, b.isbn));
+          _bookList.sort((a, b) => _sortStringColumn(a.isBorrowed.toString(), b.isBorrowed.toString()));
           break;
         case 3:
-          _bookList.sort((a, b) => _sortStringColumn(a.isBorrowed.toString(), b.isBorrowed.toString()));
+          _bookList.sort((a, b) => _sortStringColumn(a.isbn, b.isbn));
           break;
         case 4:
           _bookList.sort((a, b) => _sortStringColumn(a.price, b.price));
@@ -266,5 +266,12 @@ class _BookListScreenState extends State<BookListScreen> {
         }
         break;
     }
+  }
+  String _calculateDate(String expireDate) {
+    String year = expireDate.substring(0, 4);
+    String month = expireDate.substring(4, 6);
+    String day = expireDate.substring(6, 8);
+
+    return '$year-$month-$day';
   }
 }
