@@ -58,7 +58,7 @@ class _ReturnListScreenState extends State<ReturnListScreen> {
       ),
       body: _borrowBookList.isEmpty
           ? const Center(
-          child: Text('회원 목록 없음', style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.grey)))
+          child: Text('대출 목록 없음', style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.grey)))
           : SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: StickyHeader(
