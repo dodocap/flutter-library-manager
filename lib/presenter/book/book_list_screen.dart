@@ -202,7 +202,7 @@ class _BookListScreenState extends State<BookListScreen> {
                   Navigator.pop(context);
                   context.go(
                       Uri(
-                        path: '/result',
+                        path: '/resultBorrow',
                         queryParameters: {
                           'member': jsonEncode(widget.member!.toJson()),
                           'book': jsonEncode(book.toJson()),

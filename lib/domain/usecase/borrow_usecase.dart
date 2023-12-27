@@ -45,7 +45,7 @@ class BorrowUseCase {
     }
   }
 
-  Future<Result<BorrowInfo>> returnBook(Member member, Book book) {
-    return borrowRepository.returnBook(member, book);
+  Future<Result<BorrowInfo>> returnBook(BorrowInfoModel borrowInfoModel) async {
+    return borrowRepository.returnBook(borrowInfoModel);
   }
 }

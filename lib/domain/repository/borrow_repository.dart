@@ -8,6 +8,6 @@ abstract interface class BorrowRepository {
   Future<Result<List<BorrowInfoModel>>> getAll();
   Future<Result<List<BorrowInfoModel>>> getByMember(Member member);
   Future<Result<BorrowInfo>> borrowBook(Member member, Book book);
-  Future<Result<BorrowInfo>> returnBook(Member member, Book book);
+  Future<Result<BorrowInfo>> returnBook(BorrowInfoModel borrowInfoModel);
   Future<Result<BorrowInfo>> renewalBook(Member member, Book book);
 }

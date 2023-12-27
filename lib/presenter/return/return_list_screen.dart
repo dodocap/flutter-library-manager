@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/common/result.dart';
@@ -83,21 +86,21 @@ class _BorrowReturnListScreenState extends State<BorrowReturnListScreen> {
               horizontalMargin: 0,
               headingRowHeight: 0,
               columns: List.generate(3, (index) => const DataColumn(label: Spacer())),
-              rows: _borrowBookList.map((borrowInfo) {
+              rows: _borrowBookList.map((borrowInfoModel) {
                 return DataRow(
                     cells: [
                       DataCell(SizedBox(width: width,
-                        child: Text(borrowInfo.bookName, textAlign: TextAlign.center),
+                        child: Text(borrowInfoModel.bookName, textAlign: TextAlign.center),
                       )),
                       DataCell(SizedBox(width: width,
-                        child: Text(borrowInfo.borrowDate, textAlign: TextAlign.center),
+                        child: Text(borrowInfoModel.borrowDate, textAlign: TextAlign.center),
                       )),
                       DataCell(SizedBox(width: width,
-                        child: Text(borrowInfo.expireDate, textAlign: TextAlign.center),
+                        child: Text(borrowInfoModel.expireDate, textAlign: TextAlign.center),
                       )),
                     ],
                     onLongPress: () {
-
+                      _showSelectBookDialog(borrowInfoModel);
                     }
                 );
               }).toList(),
@@ -107,6 +110,40 @@ class _BorrowReturnListScreenState extends State<BorrowReturnListScreen> {
       ),
     );
   }
+
+  void _showSelectBookDialog(BorrowInfoModel borrowInfoModel) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(child: Text('${borrowInfoModel.bookName} 을 반납하시겠습니까?')),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('아니요', style: TextStyle(color: Colors.black87),),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  context.go(
+                      Uri(
+                          path: '/resultReturn',
+                          queryParameters: {
+                            'borrowInfoModel': jsonEncode(borrowInfoModel.toJson()),
+                          }
+                      ).toString());
+                },
+                child: const Text('예', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   void _onSortColumn(int columnIndex) {
     setState(() {
       switch (columnIndex) {

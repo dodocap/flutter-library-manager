@@ -20,8 +20,6 @@ class BorrowFileRepository implements BorrowRepository {
     _loadFile();
   }
 
-  final BookRepository _bookRepository = bookRepository;
-  final MemberRepository _memberRepository = memberRepository;
   final List<BorrowInfo> _borrowList = [];
   File? _file;
 
@@ -65,11 +63,12 @@ class BorrowFileRepository implements BorrowRepository {
   Future<Result<List<BorrowInfoModel>>> getAll() async {
     final result = (await Future.wait(
         _borrowList.map((borrowInfo) async {
-          Result<Book> book = await _bookRepository.findById(borrowInfo.bookId);
-          Result<Member> member = await _memberRepository.findById(borrowInfo.memberId);
+          Result<Book> book = await bookRepository.findById(borrowInfo.bookId);
+          Result<Member> member = await memberRepository.findById(borrowInfo.memberId);
 
           if(book is Success<Book> && member is Success<Member>) {
             return BorrowInfoModel(
+              id: borrowInfo.id,
               bookName: book.data.name,
               memberName: member.data.name,
               borrowDate: borrowInfo.borrowDate,
@@ -91,9 +90,10 @@ class BorrowFileRepository implements BorrowRepository {
   Future<Result<List<BorrowInfoModel>>> getByMember(Member member) async {
     final result = (await Future.wait(
         _borrowList.map((borrowInfo) async {
-          Result<Book> book = await _bookRepository.findById(borrowInfo.bookId);
+          Result<Book> book = await bookRepository.findById(borrowInfo.bookId);
           if(book is Success<Book> && borrowInfo.memberId == member.id) {
             return BorrowInfoModel(
+              id: borrowInfo.id,
               bookName: book.data.name,
               memberName: member.name,
               borrowDate: borrowInfo.borrowDate,
@@ -117,8 +117,8 @@ class BorrowFileRepository implements BorrowRepository {
     }
 
     Result<Book> result = await bookRepository.borrow(book);
-    if(result is Error) {
-      return Error((result as Error).error);
+    if(result is Error<Book>) {
+      return Error(result.error);
     }
 
     final BorrowInfo borrowInfo = BorrowInfo(memberId: member.id, bookId: book.id);
@@ -129,34 +129,25 @@ class BorrowFileRepository implements BorrowRepository {
   }
 
   @override
-  Future<Result<BorrowInfo>> returnBook(Member member, Book book) async {
-    if(!book.isBorrowed) {
-      return const Error(errAlreadyReturned);
-    }
-
-    Result<Book> result = await bookRepository.returns(book);
-    if(result is Error) {
-      return Error((result as Error).error);
-    }
-
-    BorrowInfo? findBorrowInfo = _borrowList.firstWhereOrNull((e) =>
-        e.memberId == member.id
-        && e.bookId == book.id
-        && (e.returnDate == null || e.returnDate == 'null')
-        && !e.isFinished);
+  Future<Result<BorrowInfo>> returnBook(BorrowInfoModel borrowInfoModel) async {
+    BorrowInfo? findBorrowInfo = _borrowList.firstWhereOrNull((e) => e.id == borrowInfoModel.id);
 
     if (findBorrowInfo == null) {
       return const Error(errNotFoundBorrowInfo);
     }
 
+    Result<Book> findBook = await bookRepository.findById(findBorrowInfo.bookId);
+    if (findBook is Error<Book>) {
+      return Error(findBook.error);
+    }
+
+    Result<Book> returnBook = await bookRepository.returns((findBook as Success).data);
+    if (returnBook is Error<Book>) {
+      return Error(returnBook.error);
+    }
+
     findBorrowInfo.setReturn();
-
-    // _borrowList.remove(findBorrowInfo);
     await _saveFile();
-
-    /*final BorrowInfo borrowInfo = BorrowInfo(memberId: member.id, bookId: book.id);
-    _borrowList.add(borrowInfo);
-    await _saveFile();*/
 
     return Success(findBorrowInfo);
   }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:go_router/go_router.dart';
 import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/domain/model/book.dart';
+import 'package:orm_library_manager/domain/model/borrow_info_model.dart';
 import 'package:orm_library_manager/domain/model/member.dart';
 import 'package:orm_library_manager/presenter/book/book_add_screen.dart';
 import 'package:orm_library_manager/presenter/book/book_list_screen.dart';
@@ -10,10 +11,11 @@ import 'package:orm_library_manager/presenter/borrow/borrow_list_screen.dart';
 import 'package:orm_library_manager/presenter/borrow/borrow_main_screen.dart';
 import 'package:orm_library_manager/presenter/borrow/borrow_renewal_screen.dart';
 import 'package:orm_library_manager/presenter/borrow/borrow_result_screen.dart';
-import 'package:orm_library_manager/presenter/borrow/borrow_return_list_screen.dart';
+import 'package:orm_library_manager/presenter/return/return_list_screen.dart';
 import 'package:orm_library_manager/presenter/main/main_screen.dart';
 import 'package:orm_library_manager/presenter/member/member_join_screen.dart';
 import 'package:orm_library_manager/presenter/member/member_list_screen.dart';
+import 'package:orm_library_manager/presenter/return/return_result_screen.dart';
 
 final routes = GoRouter(
     initialLocation: '/',
@@ -53,12 +55,15 @@ final routes = GoRouter(
               GoRoute(path: 'history', builder: (_, __) => BorrowListScreen()),
             ],
           ),
-          GoRoute(path: 'result', builder: (_, state) {
+          GoRoute(path: 'resultBorrow', builder: (_, state) {
             final Member member = Member.fromJson(jsonDecode(state.uri.queryParameters['member']!));
             final Book book = Book.fromJson(jsonDecode(state.uri.queryParameters['book']!));
-            final ScreenMode mode = ScreenMode.getByString(state.uri.queryParameters['mode']!);
-            return BorrowResultScreen(member: member, book: book, mode: mode);
-          })
+            return BorrowResultScreen(member: member, book: book);
+          }),
+          GoRoute(path: 'resultReturn', builder: (_, state) {
+            final BorrowInfoModel borrowInfoModel = BorrowInfoModel.fromJson(jsonDecode(state.uri.queryParameters['borrowInfoModel']!));
+            return ReturnResultScreen(borrowInfoModel: borrowInfoModel);
+          }),
         ],
       ),
     ]
