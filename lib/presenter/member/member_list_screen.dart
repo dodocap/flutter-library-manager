@@ -140,8 +140,19 @@ class _MemberListScreenState extends State<MemberListScreen> {
                   ],
                   onLongPress: () {
                     switch(widget.mode) {
-                      case ScreenMode.selector:
-                        _showSelectMemberDialog(member);
+                      case ScreenMode.selectorBurrower:
+                        _showSelectMemberDialog(
+                          member,
+                          '${member.name} 회원님이\n도서대출을 신청합니까?',
+                          '/borrow/member/book'
+                        );
+                        break;
+                      case ScreenMode.selectorReturner:
+                        _showSelectMemberDialog(
+                            member,
+                            '${member.name} 회원님이\n도서반납을 하십니까?',
+                            '/borrow/return/book'
+                        );
                         break;
                       case ScreenMode.editor:
                         _showDeleteMemberDialog(member);
@@ -206,12 +217,12 @@ class _MemberListScreenState extends State<MemberListScreen> {
     return aValue.compareTo(bValue);
   }
 
-  void _showSelectMemberDialog(Member member) {
+  void _showSelectMemberDialog(Member member, String title, String path) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Center(child: Text('${member.name} 회원님이\n도서대출을 신청합니까?')),
+          title: Center(child: Text(title)),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -224,7 +235,7 @@ class _MemberListScreenState extends State<MemberListScreen> {
                   Navigator.pop(context);
                   context.push(
                     Uri(
-                      path: '/borrow/member/book',
+                      path: path,
                       queryParameters: {
                         'member': jsonEncode(member.toJson())
                       }

@@ -15,8 +15,16 @@ enum Gender {
 }
 
 enum ScreenMode {
-  selector,
-  editor,
+  selectorReturner('반납'),
+  selectorBurrower('대출'),
+  editor('편집');
+
+  const ScreenMode(this.modeString);
+  final String modeString;
+
+  factory ScreenMode.getByString(String modeString) {
+    return ScreenMode.values.firstWhere((e) => e.modeString == modeString);
+  }
 }
 
 extension IterableExtension<T> on Iterable<T> {

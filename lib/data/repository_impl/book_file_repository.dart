@@ -96,7 +96,12 @@ class BookFileRepository implements BookRepository {
       return const Error(errAlreadyBorrowed);
     }
 
-    book.setBorrowed = true;
+    Book? findBook = _bookList.firstWhereOrNull((e) => e == book);
+    if (findBook == null) {
+      return const Error(errNotFoundBook);
+    }
+
+    findBook.setBorrowed = true;
     await _saveFile();
 
     return Success(book);
@@ -108,7 +113,12 @@ class BookFileRepository implements BookRepository {
       return const Error(errAlreadyReturned);
     }
 
-    book.setBorrowed = false;
+    Book? findBook = _bookList.firstWhereOrNull((e) => e == book);
+    if (findBook == null) {
+      return const Error(errNotFoundBook);
+    }
+
+    findBook.setBorrowed = false;
     await _saveFile();
 
     return Success(book);

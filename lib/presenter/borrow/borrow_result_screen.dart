@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/domain/model/book.dart';
 import 'package:orm_library_manager/domain/model/borrow_info.dart';
 import 'package:orm_library_manager/domain/model/member.dart';
 import 'package:orm_library_manager/domain/usecase/borrow_usecase.dart';
-import 'package:orm_library_manager/presenter/main/main_screen.dart';
 
 class BorrowResultScreen extends StatefulWidget {
   final Member member;
   final Book book;
+  final ScreenMode mode;
 
   const BorrowResultScreen({
     super.key,
     required this.member,
     required this.book,
+    required this.mode,
   });
 
   @override
@@ -36,15 +38,26 @@ class _BorrowResultScreenState extends State<BorrowResultScreen> {
   }
 
   Future<void> _borrowBook() async {
-    Result<BorrowInfo> result = await _borrowUseCase.borrowBook(widget.member, widget.book);
-
+    Result<BorrowInfo>? result;
+    switch (widget.mode) {
+      case ScreenMode.selectorBurrower:
+        result = await _borrowUseCase.borrowBook(widget.member, widget.book);
+      case ScreenMode.selectorReturner:
+        result = await _borrowUseCase.returnBook(widget.member, widget.book);
+        break;
+      case ScreenMode.editor:
+        // Do Nothing
+        break;
+    }
     switch (result) {
       case Success<BorrowInfo>(:final data):
         _borrowInfo = data;
         _isSuccess = true;
         break;
       case Error(:final error):
-        _isSuccess = false;
+        print(error);
+        break;
+      default:
         break;
     }
     setState(() {

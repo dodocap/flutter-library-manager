@@ -41,7 +41,7 @@ class _BookListScreenState extends State<BookListScreen> {
   }
 
   Future<void> _loadBookList() async {
-    Result<List<Book>> memberList = await _bookUseCase.getBookList(canBorrow: widget.mode == ScreenMode.selector);
+    Result<List<Book>> memberList = await _bookUseCase.getBookList(canBorrow: widget.mode != ScreenMode.editor);
 
     switch (memberList) {
       case Success<List<Book>>(:final data):
@@ -134,8 +134,11 @@ class _BookListScreenState extends State<BookListScreen> {
                           ],
                           onLongPress: () {
                             switch (widget.mode) {
-                              case ScreenMode.selector:
-                                _showSelectBookDialog(book);
+                              case ScreenMode.selectorBurrower:
+                                _showSelectBookDialog(book, '${book.name} 도서를\n대여하시겠습니까?');
+                                break;
+                              case ScreenMode.selectorReturner:
+                                _showSelectBookDialog(book, '${book.name} 도서를\n반납하시겠습니까?');
                                 break;
                               case ScreenMode.editor:
                                 _showDeleteBookDialog(book);
@@ -181,12 +184,12 @@ class _BookListScreenState extends State<BookListScreen> {
     return aValue.compareTo(bValue);
   }
 
-  void _showSelectBookDialog(Book book) {
+  void _showSelectBookDialog(Book book, String title) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Center(child: Text('${book.name} 도서를\n대여하시겠습니까?')),
+          title: Center(child: Text(title)),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -202,7 +205,8 @@ class _BookListScreenState extends State<BookListScreen> {
                         path: '/result',
                         queryParameters: {
                           'member': jsonEncode(widget.member!.toJson()),
-                          'book': jsonEncode(book.toJson())
+                          'book': jsonEncode(book.toJson()),
+                          'mode': widget.mode.modeString,
                         }
                       ).toString()
                   );

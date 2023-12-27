@@ -1,5 +1,8 @@
+import 'package:orm_library_manager/common/common.dart';
+import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/domain/model/book.dart';
+import 'package:orm_library_manager/domain/model/member.dart';
 import 'package:orm_library_manager/domain/repository/book_repository.dart';
 
 class BookUseCase {
@@ -11,16 +14,13 @@ class BookUseCase {
 
   Future<Result<List<Book>>> getBookList({required bool canBorrow}) async {
     Result<List<Book>> result = await bookRepository.getAllBooks();
-    switch (result) {
-      case Success(:final data):
-        if(canBorrow) {
-          List<Book> newList = data.toList()..removeWhere((element) => element.isBorrowed);
-          return Success(newList);
-        }
-        return Success(data);
-      case Error(:final error):
-        return result;
+
+    if(canBorrow && result is Success<List<Book>>) {
+      List<Book> newList = result.data.toList()..removeWhere((element) => element.isBorrowed);
+      return Success(newList);
     }
+
+    return result;
   }
 
   Future<Result<Book>> addBook({

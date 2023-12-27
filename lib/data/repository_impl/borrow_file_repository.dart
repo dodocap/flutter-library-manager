@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/common/result.dart';
@@ -62,7 +63,6 @@ class BorrowFileRepository implements BorrowRepository {
 
   @override
   Future<Result<List<BorrowInfoModel>>> getAll() async {
-    final sw = Stopwatch()..start();
     final result = (await Future.wait(
         _borrowList.map((borrowInfo) async {
           Result<Book> book = await _bookRepository.findById(borrowInfo.bookId);
@@ -84,7 +84,28 @@ class BorrowFileRepository implements BorrowRepository {
       .cast<BorrowInfoModel>()
       .toList();
 
-    print('getAllElapsedTime : ${sw.elapsed}');
+    return Success(result);
+  }
+
+  @override
+  Future<Result<List<BorrowInfoModel>>> getByMember(Member member) async {
+    final result = (await Future.wait(
+        _borrowList.map((borrowInfo) async {
+          Result<Book> book = await _bookRepository.findById(borrowInfo.bookId);
+          if(book is Success<Book> && borrowInfo.memberId == member.id) {
+            return BorrowInfoModel(
+              bookName: book.data.name,
+              memberName: member.name,
+              borrowDate: borrowInfo.borrowDate,
+              expireDate: borrowInfo.expireDate,
+              returnDate: borrowInfo.returnDate,
+              isFinished: borrowInfo.isFinished,
+            );
+          }
+        })
+    )).where((element) => element != null)
+        .cast<BorrowInfoModel>()
+        .toList();
 
     return Success(result);
   }
@@ -109,7 +130,35 @@ class BorrowFileRepository implements BorrowRepository {
 
   @override
   Future<Result<BorrowInfo>> returnBook(Member member, Book book) async {
-    return const Error('');
+    if(!book.isBorrowed) {
+      return const Error(errAlreadyReturned);
+    }
+
+    Result<Book> result = await bookRepository.returns(book);
+    if(result is Error) {
+      return Error((result as Error).error);
+    }
+
+    BorrowInfo? findBorrowInfo = _borrowList.firstWhereOrNull((e) =>
+        e.memberId == member.id
+        && e.bookId == book.id
+        && (e.returnDate == null || e.returnDate == 'null')
+        && !e.isFinished);
+
+    if (findBorrowInfo == null) {
+      return const Error(errNotFoundBorrowInfo);
+    }
+
+    findBorrowInfo.setReturn();
+
+    // _borrowList.remove(findBorrowInfo);
+    await _saveFile();
+
+    /*final BorrowInfo borrowInfo = BorrowInfo(memberId: member.id, bookId: book.id);
+    _borrowList.add(borrowInfo);
+    await _saveFile();*/
+
+    return Success(findBorrowInfo);
   }
 
   @override

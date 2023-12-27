@@ -32,4 +32,20 @@ class BorrowUseCase {
         return Error(error);
     }
   }
+
+  Future<Result<List<BorrowInfoModel>>> getBorrowListByMember({required Member member}) async {
+    Result<List<BorrowInfoModel>> result = await borrowRepository.getByMember(member);
+
+    switch (result) {
+      case Success<List<BorrowInfoModel>>(:final data):
+        final List<BorrowInfoModel> newList = data.toList()..removeWhere((element) => element.isFinished);
+      return Success(newList);
+      case Error(:final error):
+        return Error(error);
+    }
+  }
+
+  Future<Result<BorrowInfo>> returnBook(Member member, Book book) {
+    return borrowRepository.returnBook(member, book);
+  }
 }
