@@ -1,6 +1,7 @@
 import 'package:orm_library_manager/common/common.dart';
+import 'package:orm_library_manager/domain/model/csv_covertable.dart';
 
-class BorrowInfo {
+class BorrowInfo implements CsvConvertible {
   final int _id;
   final int _memberId;
   final int _bookId;
@@ -75,6 +76,7 @@ class BorrowInfo {
       _returnDate.hashCode ^
       _isFinished.hashCode;
 
+  @override
   String toCSV() => '$_id,$_memberId,$_bookId,$_borrowDate,$_expireDate,$_returnDate,$_isFinished\n';
 
   factory BorrowInfo.fromCSV(List<String> list) {

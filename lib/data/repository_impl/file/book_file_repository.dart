@@ -1,73 +1,36 @@
-import 'dart:io';
-
 import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/result.dart';
+import 'package:orm_library_manager/data/repository_impl/file/base_file_repository.dart';
 import 'package:orm_library_manager/domain/model/book.dart';
 import 'package:orm_library_manager/domain/repository/book_repository.dart';
-import 'package:path_provider/path_provider.dart';
 
-class BookFileRepository implements BookRepository {
-  static final BookFileRepository _instance = BookFileRepository._internal();
+class BookFileRepository extends BaseFileRepository<Book> implements BookRepository {
+  static final BookFileRepository _instance = BookFileRepository._internal(bookFileName, bookFileRowString);
   factory BookFileRepository() => _instance;
-  BookFileRepository._internal() {
-    _loadFile();
-  }
+  BookFileRepository._internal(super.fileName, super.fileRowString);
 
-  final List<Book> _bookList = [];
-  File? _file;
-
-  Future<void> _loadFile() async {
-    final Directory directory = await getApplicationDocumentsDirectory();
-    _file = File('${directory.path}/$bookFileName');
-
-    try {
-      final String readString = await _file?.readAsString() ?? '';
-      List<String> readLines = readString.split('\n');
-      String readFirstRow = readLines.first.split(',').map((e) => e.trim()).join(',');
-
-      if (readFirstRow == bookFileRowString) {
-        for(int i = 1; i < readLines.length; i++) {
-          final List<String> commaSplitList = readLines[i].split(',').map((e) => e.trim().toLowerCase()).toList();
-          if (commaSplitList.length == bookFileColumnCount) {
-            _bookList.add(Book.fromCSV(readLines[i].split(',').map((e) => e.trim().toLowerCase()).toList()));
-          }
-        }
-        print(_bookList);
-      } else {
-        // await _file?.delete();
-      }
-    } catch (e) {
-      print(e);
-      // await _file?.delete();
-    }
-  }
-
-  Future<void> _saveFile() async {
-    final StringBuffer stringBuffer = StringBuffer();
-    stringBuffer.write('$bookFileRowString\n');
-    for (final book in _bookList) {
-      stringBuffer.write(book.toCSV());
-    }
-    await _file?.writeAsString(stringBuffer.toString());
+  @override
+  Book fromCSV(List<String> splitStringList) {
+    return Book.fromCSV(splitStringList);
   }
 
   @override
   Future<Result<Book>> add(Book book) async {
-    _bookList.add(book);
+    list.add(book);
 
-    await _saveFile();
+    await saveFile();
     return Success(book);
   }
 
   @override
   Future<Result<List<Book>>> getAllBooks() async {
-    return Success(_bookList);
+    return Success(list);
   }
 
   @override
   Future<Result<Book>> findById(int id) async {
-    Book? findBook = _bookList.firstWhereOrNull((book) => book.id == id);
+    Book? findBook = list.firstWhereOrNull((book) => book.id == id);
     if(findBook == null) {
       return const Error(errNotFoundBook);
     }
@@ -77,15 +40,15 @@ class BookFileRepository implements BookRepository {
 
   @override
   Future<Result<Book>> remove(Book book) async {
-    if (!_bookList.contains(book)) {
+    if (!list.contains(book)) {
       return const Error(errNotFoundBook);
     }
 
-    if (!_bookList.remove(book)) {
+    if (!list.remove(book)) {
       return const Error(errFailedRemoveBook);
     }
 
-    await _saveFile();
+    await saveFile();
 
     return Success(book);
   }
@@ -96,13 +59,13 @@ class BookFileRepository implements BookRepository {
       return const Error(errAlreadyBorrowed);
     }
 
-    Book? findBook = _bookList.firstWhereOrNull((e) => e == book);
+    Book? findBook = list.firstWhereOrNull((e) => e == book);
     if (findBook == null) {
       return const Error(errNotFoundBook);
     }
 
     findBook.setBorrowed = true;
-    await _saveFile();
+    await saveFile();
 
     return Success(book);
   }
@@ -113,14 +76,16 @@ class BookFileRepository implements BookRepository {
       return const Error(errAlreadyReturned);
     }
 
-    Book? findBook = _bookList.firstWhereOrNull((e) => e == book);
+    Book? findBook = list.firstWhereOrNull((e) => e == book);
     if (findBook == null) {
       return const Error(errNotFoundBook);
     }
 
     findBook.setBorrowed = false;
-    await _saveFile();
+    await saveFile();
 
     return Success(book);
   }
+
+
 }

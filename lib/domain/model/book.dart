@@ -1,4 +1,6 @@
-class Book {
+import 'package:orm_library_manager/domain/model/csv_covertable.dart';
+
+class Book implements CsvConvertible {
   int _id;
   String _name;
   String _price;
@@ -58,6 +60,7 @@ class Book {
   @override
   int get hashCode => _id.hashCode ^ _name.hashCode ^ _price.hashCode ^ _isbn.hashCode ^ _publishDate.hashCode ^ _isBorrowed.hashCode;
 
+  @override
   String toCSV() => '$_id,$_name,$_price,$_publishDate,$_isbn,$_isBorrowed\n';
 
   factory Book.fromCSV(List<String> list) {

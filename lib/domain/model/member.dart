@@ -1,6 +1,7 @@
 import 'package:orm_library_manager/common/common.dart';
+import 'package:orm_library_manager/domain/model/csv_covertable.dart';
 
-class Member {
+class Member implements CsvConvertible {
   int _id;
   String _name;
   String _address;
@@ -100,6 +101,7 @@ class Member {
     );
   }
 
+  @override
   String toCSV() => '$_id,$_name,$_contact,$_birthDate,$_address,${_gender.genderString}\n';
 
   factory Member.fromCSV(List<String> list) {
