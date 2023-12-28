@@ -2,20 +2,20 @@ import 'dart:convert';
 
 import 'package:go_router/go_router.dart';
 import 'package:orm_library_manager/common/common.dart';
-import 'package:orm_library_manager/domain/model/book.dart';
+import 'package:orm_library_manager/domain/dto/book.dart';
+import 'package:orm_library_manager/domain/dto/member.dart';
 import 'package:orm_library_manager/domain/model/borrow_info_model.dart';
-import 'package:orm_library_manager/domain/model/member.dart';
 import 'package:orm_library_manager/presenter/book/book_add_screen.dart';
 import 'package:orm_library_manager/presenter/book/book_list_screen.dart';
 import 'package:orm_library_manager/presenter/borrow/borrow_list_screen.dart';
 import 'package:orm_library_manager/presenter/borrow/borrow_main_screen.dart';
-import 'package:orm_library_manager/presenter/renewal/renewal_list_screen.dart';
 import 'package:orm_library_manager/presenter/borrow/borrow_result_screen.dart';
-import 'package:orm_library_manager/presenter/renewal/renewal_result_screen.dart';
-import 'package:orm_library_manager/presenter/return/return_list_screen.dart';
 import 'package:orm_library_manager/presenter/main/main_screen.dart';
 import 'package:orm_library_manager/presenter/member/member_join_screen.dart';
 import 'package:orm_library_manager/presenter/member/member_list_screen.dart';
+import 'package:orm_library_manager/presenter/renewal/renewal_list_screen.dart';
+import 'package:orm_library_manager/presenter/renewal/renewal_result_screen.dart';
+import 'package:orm_library_manager/presenter/return/return_list_screen.dart';
 import 'package:orm_library_manager/presenter/return/return_result_screen.dart';
 
 final routes = GoRouter(

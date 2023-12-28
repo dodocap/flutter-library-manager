@@ -6,10 +6,8 @@ import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/common/result.dart';
-import 'package:orm_library_manager/domain/model/member.dart';
+import 'package:orm_library_manager/domain/dto/member.dart';
 import 'package:orm_library_manager/domain/usecase/member_usecase.dart';
-import 'package:orm_library_manager/presenter/book/book_list_screen.dart';
-import 'package:orm_library_manager/presenter/member/member_join_screen.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class MemberListScreen extends StatefulWidget {

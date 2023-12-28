@@ -2,7 +2,7 @@ import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/data/repository_impl/file/base_file_repository.dart';
-import 'package:orm_library_manager/domain/model/book.dart';
+import 'package:orm_library_manager/domain/dto/book.dart';
 import 'package:orm_library_manager/domain/repository/book_repository.dart';
 
 class BookFileRepository extends BaseFileRepository<Book> implements BookRepository {

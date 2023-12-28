@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/common/result.dart';
-import 'package:orm_library_manager/domain/model/borrow_info.dart';
+import 'package:orm_library_manager/domain/dto/borrow_info.dart';
 import 'package:orm_library_manager/domain/model/borrow_info_model.dart';
 import 'package:orm_library_manager/domain/usecase/book_usecase.dart';
 import 'package:orm_library_manager/domain/usecase/borrow_usecase.dart';

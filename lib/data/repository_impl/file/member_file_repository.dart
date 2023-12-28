@@ -2,7 +2,7 @@ import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/data/repository_impl/file/base_file_repository.dart';
-import 'package:orm_library_manager/domain/model/member.dart';
+import 'package:orm_library_manager/domain/dto/member.dart';
 import 'package:orm_library_manager/domain/repository/member_repository.dart';
 
 class MemberFileRepository extends BaseFileRepository<Member> implements MemberRepository {

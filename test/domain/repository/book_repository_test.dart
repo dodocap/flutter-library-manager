@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:orm_library_manager/data/repository_impl/memory/book_memory_repository.dart';
-import 'package:orm_library_manager/domain/model/book.dart';
+import 'package:orm_library_manager/domain/dto/book.dart';
 import 'package:orm_library_manager/domain/repository/book_repository.dart';
 
 void main() {

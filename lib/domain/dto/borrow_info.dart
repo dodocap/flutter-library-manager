@@ -1,5 +1,5 @@
 import 'package:orm_library_manager/common/common.dart';
-import 'package:orm_library_manager/domain/model/csv_covertable.dart';
+import 'package:orm_library_manager/domain/dto/csv_covertable.dart';
 
 class BorrowInfo implements CsvConvertible {
   final int _id;

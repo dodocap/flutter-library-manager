@@ -1,4 +1,4 @@
-import 'package:orm_library_manager/domain/model/csv_covertable.dart';
+import 'package:orm_library_manager/domain/dto/csv_covertable.dart';
 
 class Book implements CsvConvertible {
   int _id;

@@ -1,8 +1,8 @@
 import 'package:orm_library_manager/common/result.dart';
-import 'package:orm_library_manager/domain/model/book.dart';
-import 'package:orm_library_manager/domain/model/borrow_info.dart';
+import 'package:orm_library_manager/domain/dto/book.dart';
+import 'package:orm_library_manager/domain/dto/borrow_info.dart';
+import 'package:orm_library_manager/domain/dto/member.dart';
 import 'package:orm_library_manager/domain/model/borrow_info_model.dart';
-import 'package:orm_library_manager/domain/model/member.dart';
 
 abstract interface class BorrowRepository {
   Future<Result<List<BorrowInfoModel>>> getAll();

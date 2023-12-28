@@ -1,18 +1,13 @@
-import 'dart:io';
-
 import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/common/result.dart';
 import 'package:orm_library_manager/data/repository_impl/file/base_file_repository.dart';
-import 'package:orm_library_manager/domain/model/book.dart';
-import 'package:orm_library_manager/domain/model/borrow_info.dart';
+import 'package:orm_library_manager/domain/dto/book.dart';
+import 'package:orm_library_manager/domain/dto/borrow_info.dart';
+import 'package:orm_library_manager/domain/dto/member.dart';
 import 'package:orm_library_manager/domain/model/borrow_info_model.dart';
-import 'package:orm_library_manager/domain/model/member.dart';
-import 'package:orm_library_manager/domain/repository/book_repository.dart';
 import 'package:orm_library_manager/domain/repository/borrow_repository.dart';
-import 'package:orm_library_manager/domain/repository/member_repository.dart';
-import 'package:path_provider/path_provider.dart';
 
 class BorrowFileRepository extends BaseFileRepository<BorrowInfo> implements BorrowRepository {
   static final BorrowFileRepository _instance = BorrowFileRepository._internal(borrowFileName, borrowFileRowString);

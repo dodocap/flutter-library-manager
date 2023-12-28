@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:orm_library_manager/common/result.dart';
-import 'package:orm_library_manager/domain/model/book.dart';
+import 'package:orm_library_manager/domain/dto/book.dart';
 import 'package:orm_library_manager/domain/repository/book_repository.dart';
 
 class BookMemoryRepository implements BookRepository {

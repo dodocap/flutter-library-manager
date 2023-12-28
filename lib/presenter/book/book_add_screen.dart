@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/common/result.dart';
-import 'package:orm_library_manager/domain/model/book.dart';
+import 'package:orm_library_manager/domain/dto/book.dart';
 import 'package:orm_library_manager/domain/usecase/book_usecase.dart';
 
 class BookAddScreen extends StatefulWidget {

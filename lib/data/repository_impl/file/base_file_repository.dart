@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:orm_library_manager/domain/model/csv_covertable.dart';
+import 'package:orm_library_manager/domain/dto/csv_covertable.dart';
 import 'package:path_provider/path_provider.dart';
 
 abstract class BaseFileRepository<T extends CsvConvertible> {

@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/constants.dart';
 import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/common/result.dart';
+import 'package:orm_library_manager/domain/dto/member.dart';
 import 'package:orm_library_manager/domain/model/borrow_info_model.dart';
-import 'package:orm_library_manager/domain/model/member.dart';
 import 'package:orm_library_manager/domain/usecase/borrow_usecase.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 

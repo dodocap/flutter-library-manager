@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:orm_library_manager/common/common.dart';
 import 'package:orm_library_manager/common/repositories.dart';
 import 'package:orm_library_manager/common/result.dart';
-import 'package:orm_library_manager/domain/model/member.dart';
+import 'package:orm_library_manager/domain/dto/member.dart';
 import 'package:orm_library_manager/domain/usecase/member_usecase.dart';
 
 class MemberJoinScreen extends StatefulWidget {

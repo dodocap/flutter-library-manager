@@ -1,5 +1,5 @@
 import 'package:orm_library_manager/common/result.dart';
-import 'package:orm_library_manager/domain/model/member.dart';
+import 'package:orm_library_manager/domain/dto/member.dart';
 
 abstract interface class MemberRepository {
   Future<Result<List<Member>>> getAllMembers();
